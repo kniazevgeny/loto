@@ -26,7 +26,7 @@ The scripts in `scripts/` can build alternative public-domain image libraries fr
 
 ## Deployment
 
-The `main` branch contains source code. The `deploy` branch contains the generated static site at its root and is intended as the GitHub Pages publishing source.
+GitHub Actions validates and builds every push to `main`, then publishes `dist/` to GitHub Pages. The site is configured for the `/loto/` project path; generated deployment files are not committed.
 
 ## Licensing
 
