@@ -1,0 +1,1218 @@
+[
+  {
+    "id": "commons-la-joconde",
+    "imageUrl": "./library/commons-la-joconde.jpg",
+    "titles": {
+      "fr": "La Joconde",
+      "en": "Mona Lisa",
+      "ru": "Мона Лиза"
+    },
+    "author": "Léonard de Vinci",
+    "year": "v. 1503–1519",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Mona+Lisa+Leonardo+da+Vinci&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-cne",
+    "imageUrl": "./library/commons-la-cne.jpg",
+    "titles": {
+      "fr": "La Cène",
+      "en": "The Last Supper",
+      "ru": "Тайная вечеря"
+    },
+    "author": "Léonard de Vinci",
+    "year": "1495–1498",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Last+Supper+Leonardo+da+Vinci&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-dame-l-hermine",
+    "imageUrl": "./library/commons-la-dame-l-hermine.jpg",
+    "titles": {
+      "fr": "La Dame à l'hermine",
+      "en": "Lady with an Ermine",
+      "ru": "Дама с горностаем"
+    },
+    "author": "Léonard de Vinci",
+    "year": "v. 1489–1491",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Lady+with+an+Ermine+Leonardo+da+Vinci&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-l-homme-de-vitruve",
+    "imageUrl": "./library/commons-l-homme-de-vitruve.jpg",
+    "titles": {
+      "fr": "L'Homme de Vitruve",
+      "en": "Vitruvian Man",
+      "ru": "Витрувианский человек"
+    },
+    "author": "Léonard de Vinci",
+    "year": "v. 1490",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Vitruvian+Man+Leonardo+da+Vinci&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-naissance-de-vnus",
+    "imageUrl": "./library/commons-la-naissance-de-vnus.jpg",
+    "titles": {
+      "fr": "La Naissance de Vénus",
+      "en": "The Birth of Venus",
+      "ru": "Рождение Венеры"
+    },
+    "author": "Sandro Botticelli",
+    "year": "v. 1485",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Birth+of+Venus+Botticelli&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-le-printemps",
+    "imageUrl": "./library/commons-le-printemps.jpg",
+    "titles": {
+      "fr": "Le Printemps",
+      "en": "Primavera",
+      "ru": "Весна"
+    },
+    "author": "Sandro Botticelli",
+    "year": "v. 1480",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Primavera+Botticelli&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-l-cole-d-athnes",
+    "imageUrl": "./library/commons-l-cole-d-athnes.jpg",
+    "titles": {
+      "fr": "L'École d'Athènes",
+      "en": "The School of Athens",
+      "ru": "Афинская школа"
+    },
+    "author": "Raphaël",
+    "year": "1509–1511",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+School+of+Athens+Raphael&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-madone-sixtine",
+    "imageUrl": "./library/commons-la-madone-sixtine.jpg",
+    "titles": {
+      "fr": "La Madone Sixtine",
+      "en": "Sistine Madonna",
+      "ru": "Сикстинская Мадонна"
+    },
+    "author": "Raphaël",
+    "year": "1512–1513",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Sistine+Madonna+Raphael&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-transfiguration",
+    "imageUrl": "./library/commons-la-transfiguration.jpg",
+    "titles": {
+      "fr": "La Transfiguration",
+      "en": "The Transfiguration",
+      "ru": "Преображение"
+    },
+    "author": "Raphaël",
+    "year": "1516–1520",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Transfiguration+Raphael&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-cration-d-adam",
+    "imageUrl": "./library/commons-la-cration-d-adam.jpg",
+    "titles": {
+      "fr": "La Création d'Adam",
+      "en": "The Creation of Adam",
+      "ru": "Сотворение Адама"
+    },
+    "author": "Michel-Ange",
+    "year": "v. 1512",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Creation+of+Adam+Michelangelo&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-ronde-de-nuit",
+    "imageUrl": "./library/commons-la-ronde-de-nuit.jpg",
+    "titles": {
+      "fr": "La Ronde de nuit",
+      "en": "The Night Watch",
+      "ru": "Ночной дозор"
+    },
+    "author": "Rembrandt",
+    "year": "1642",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Night+Watch+Rembrandt&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-leon-d-anatomie",
+    "imageUrl": "./library/commons-la-leon-d-anatomie.jpg",
+    "titles": {
+      "fr": "La Leçon d'anatomie",
+      "en": "The Anatomy Lesson of Dr. Tulp",
+      "ru": "Урок анатомии доктора Тульпа"
+    },
+    "author": "Rembrandt",
+    "year": "1632",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Anatomy+Lesson+of+Dr+Nicolaes+Tulp&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-fiance-juive",
+    "imageUrl": "./library/commons-la-fiance-juive.jpg",
+    "titles": {
+      "fr": "La Fiancée juive",
+      "en": "The Jewish Bride",
+      "ru": "Еврейская невеста"
+    },
+    "author": "Rembrandt",
+    "year": "v. 1665–1669",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Jewish+Bride+Rembrandt&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-jeune-fille-la-perle",
+    "imageUrl": "./library/commons-la-jeune-fille-la-perle.jpg",
+    "titles": {
+      "fr": "La Jeune Fille à la perle",
+      "en": "Girl with a Pearl Earring",
+      "ru": "Девушка с жемчужной серёжкой"
+    },
+    "author": "Johannes Vermeer",
+    "year": "v. 1665",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Girl+with+a+Pearl+Earring+Vermeer&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-laitire",
+    "imageUrl": "./library/commons-la-laitire.jpg",
+    "titles": {
+      "fr": "La Laitière",
+      "en": "The Milkmaid",
+      "ru": "Молочница"
+    },
+    "author": "Johannes Vermeer",
+    "year": "v. 1658",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Milkmaid+Vermeer&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-vue-de-delft",
+    "imageUrl": "./library/commons-vue-de-delft.jpg",
+    "titles": {
+      "fr": "Vue de Delft",
+      "en": "View of Delft",
+      "ru": "Вид Делфта"
+    },
+    "author": "Johannes Vermeer",
+    "year": "v. 1660–1661",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=View+of+Delft+Vermeer&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-liseuse-la-fentre",
+    "imageUrl": "./library/commons-la-liseuse-la-fentre.jpg",
+    "titles": {
+      "fr": "La Liseuse à la fenêtre",
+      "en": "Girl Reading a Letter at an Open Window",
+      "ru": "Девушка, читающая письмо у открытого окна"
+    },
+    "author": "Johannes Vermeer",
+    "year": "v. 1657–1659",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Girl+Reading+a+Letter+at+an+Open+Window+Vermeer&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-les-mnines",
+    "imageUrl": "./library/commons-les-mnines.jpg",
+    "titles": {
+      "fr": "Les Ménines",
+      "en": "Las Meninas",
+      "ru": "Менины"
+    },
+    "author": "Diego Velázquez",
+    "year": "1656",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Las+Meninas+Velazquez&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-le-3-mai-1808",
+    "imageUrl": "./library/commons-le-3-mai-1808.jpg",
+    "titles": {
+      "fr": "Le 3 mai 1808",
+      "en": "The Third of May 1808",
+      "ru": "Третье мая 1808 года"
+    },
+    "author": "Francisco de Goya",
+    "year": "1814",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Third+of+May+1808+Goya&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-saturne-dvorant-un-de-ses-fils",
+    "imageUrl": "./library/commons-saturne-dvorant-un-de-ses-fils.jpg",
+    "titles": {
+      "fr": "Saturne dévorant un de ses fils",
+      "en": "Saturn Devouring His Son",
+      "ru": "Сатурн, пожирающий своего сына"
+    },
+    "author": "Francisco de Goya",
+    "year": "v. 1819–1823",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Saturn+Devouring+His+Son+Goya&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-maja-nue",
+    "imageUrl": "./library/commons-la-maja-nue.jpg",
+    "titles": {
+      "fr": "La Maja nue",
+      "en": "The Nude Maja",
+      "ru": "Маха обнажённая"
+    },
+    "author": "Francisco de Goya",
+    "year": "v. 1797–1800",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Nude+Maja+Goya&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-libert-guidant-le-peuple",
+    "imageUrl": "./library/commons-la-liberte-guidant-le-peuple.jpg",
+    "titles": {
+      "fr": "La Liberté guidant le peuple",
+      "en": "Liberty Leading the People",
+      "ru": "Свобода, ведущая народ"
+    },
+    "author": "Eugène Delacroix",
+    "year": "1830",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:La_Libert%C3%A9_guidant_le_peuple_-_Eug%C3%A8ne_Delacroix_-_Mus%C3%A9e_du_Louvre_Peintures_RF_129_-_apr%C3%A8s_restauration_2024.jpg",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-le-radeau-de-la-mduse",
+    "imageUrl": "./library/commons-le-radeau-de-la-mduse.jpg",
+    "titles": {
+      "fr": "Le Radeau de La Méduse",
+      "en": "The Raft of the Medusa",
+      "ru": "Плот «Медузы»"
+    },
+    "author": "Théodore Géricault",
+    "year": "1818–1819",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Raft+of+the+Medusa+Gericault&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-le-sacre-de-napolon",
+    "imageUrl": "./library/commons-le-sacre-de-napolon.jpg",
+    "titles": {
+      "fr": "Le Sacre de Napoléon",
+      "en": "The Coronation of Napoleon",
+      "ru": "Коронация Наполеона"
+    },
+    "author": "Jacques-Louis David",
+    "year": "1805–1807",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Coronation+of+Napoleon+David&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-mort-de-marat",
+    "imageUrl": "./library/commons-la-mort-de-marat.jpg",
+    "titles": {
+      "fr": "La Mort de Marat",
+      "en": "The Death of Marat",
+      "ru": "Смерть Марата"
+    },
+    "author": "Jacques-Louis David",
+    "year": "1793",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Death+of+Marat+David&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-le-serment-des-horaces",
+    "imageUrl": "./library/commons-le-serment-des-horaces.jpg",
+    "titles": {
+      "fr": "Le Serment des Horaces",
+      "en": "Oath of the Horatii",
+      "ru": "Клятва Горациев"
+    },
+    "author": "Jacques-Louis David",
+    "year": "1784",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Oath+of+the+Horatii+David&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-bonaparte-franchissant-les-alpes",
+    "imageUrl": "./library/commons-bonaparte-franchissant-les-alpes.jpg",
+    "titles": {
+      "fr": "Bonaparte franchissant les Alpes",
+      "en": "Napoleon Crossing the Alps",
+      "ru": "Бонапарт на перевале Сен-Бернар"
+    },
+    "author": "Jacques-Louis David",
+    "year": "1801",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Napoleon+Crossing+the+Alps+David&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-grande-odalisque",
+    "imageUrl": "./library/commons-la-grande-odalisque.jpg",
+    "titles": {
+      "fr": "La Grande Odalisque",
+      "en": "Grande Odalisque",
+      "ru": "Большая одалиска"
+    },
+    "author": "Jean-Auguste-Dominique Ingres",
+    "year": "1814",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Grande+Odalisque+Ingres&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-les-glaneuses",
+    "imageUrl": "./library/commons-les-glaneuses.jpg",
+    "titles": {
+      "fr": "Les Glaneuses",
+      "en": "The Gleaners",
+      "ru": "Сборщицы колосьев"
+    },
+    "author": "Jean-François Millet",
+    "year": "1857",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Gleaners+Millet&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-l-anglus",
+    "imageUrl": "./library/commons-l-anglus.jpg",
+    "titles": {
+      "fr": "L'Angélus",
+      "en": "The Angelus",
+      "ru": "Анжелюс"
+    },
+    "author": "Jean-François Millet",
+    "year": "1857–1859",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Angelus+Millet&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-olympia",
+    "imageUrl": "./library/commons-olympia.jpg",
+    "titles": {
+      "fr": "Olympia",
+      "en": "Olympia",
+      "ru": "Олимпия"
+    },
+    "author": "Édouard Manet",
+    "year": "1863",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Olympia+Manet&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-un-bar-aux-folies-bergre",
+    "imageUrl": "./library/commons-un-bar-aux-folies-bergre.jpg",
+    "titles": {
+      "fr": "Un bar aux Folies Bergère",
+      "en": "A Bar at the Folies-Bergère",
+      "ru": "Бар в «Фоли-Бержер»"
+    },
+    "author": "Édouard Manet",
+    "year": "1882",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=A+Bar+at+the+Folies-Bergere+Manet&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-le-djeuner-sur-l-herbe",
+    "imageUrl": "./library/commons-le-djeuner-sur-l-herbe.jpg",
+    "titles": {
+      "fr": "Le Déjeuner sur l'herbe",
+      "en": "Luncheon on the Grass",
+      "ru": "Завтрак на траве"
+    },
+    "author": "Édouard Manet",
+    "year": "1863",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Luncheon+on+the+Grass+Manet&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-impression-soleil-levant",
+    "imageUrl": "./library/override-commons-impression-soleil-levant.jpg",
+    "titles": {
+      "fr": "Impression, soleil levant",
+      "en": "Impression, Sunrise",
+      "ru": "Впечатление. Восход солнца"
+    },
+    "author": "Claude Monet",
+    "year": "1872",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Monet_-_Impression%2C_Sunrise.jpg",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-les-nymphas",
+    "imageUrl": "./library/commons-les-nymphas.jpg",
+    "titles": {
+      "fr": "Les Nymphéas",
+      "en": "Water Lilies",
+      "ru": "Кувшинки"
+    },
+    "author": "Claude Monet",
+    "year": "1899",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Water+Lilies+Monet&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-femme-l-ombrelle",
+    "imageUrl": "./library/commons-la-femme-l-ombrelle.jpg",
+    "titles": {
+      "fr": "La Femme à l'ombrelle",
+      "en": "Woman with a Parasol",
+      "ru": "Дама с зонтиком"
+    },
+    "author": "Claude Monet",
+    "year": "1875",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Woman+with+a+Parasol+Monet&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-nuit-toile",
+    "imageUrl": "./library/commons-la-nuit-toile.jpg",
+    "titles": {
+      "fr": "La Nuit étoilée",
+      "en": "The Starry Night",
+      "ru": "Звёздная ночь"
+    },
+    "author": "Vincent van Gogh",
+    "year": "1889",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Starry+Night+Van+Gogh&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-les-tournesols",
+    "imageUrl": "./library/commons-les-tournesols.jpg",
+    "titles": {
+      "fr": "Les Tournesols",
+      "en": "Sunflowers",
+      "ru": "Подсолнухи"
+    },
+    "author": "Vincent van Gogh",
+    "year": "1888",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Sunflowers+Van+Gogh&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-chambre-arles",
+    "imageUrl": "./library/commons-la-chambre-arles.jpg",
+    "titles": {
+      "fr": "La Chambre à Arles",
+      "en": "The Bedroom in Arles",
+      "ru": "Спальня в Арле"
+    },
+    "author": "Vincent van Gogh",
+    "year": "1888",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Bedroom+Van+Gogh&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-terrasse-du-caf-le-soir",
+    "imageUrl": "./library/commons-terrasse-du-caf-le-soir.jpg",
+    "titles": {
+      "fr": "Terrasse du café le soir",
+      "en": "Café Terrace at Night",
+      "ru": "Ночная терраса кафе"
+    },
+    "author": "Vincent van Gogh",
+    "year": "1888",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Cafe+Terrace+at+Night+Van+Gogh&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-les-iris",
+    "imageUrl": "./library/commons-les-iris.jpg",
+    "titles": {
+      "fr": "Les Iris",
+      "en": "Irises",
+      "ru": "Ирисы"
+    },
+    "author": "Vincent van Gogh",
+    "year": "1889",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Irises+Van+Gogh&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-autoportrait",
+    "imageUrl": "./library/commons-autoportrait.jpg",
+    "titles": {
+      "fr": "Autoportrait",
+      "en": "Self-Portrait",
+      "ru": "Автопортрет"
+    },
+    "author": "Vincent van Gogh",
+    "year": "1889",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Van+Gogh+Self-Portrait+1889&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-le-cri",
+    "imageUrl": "./library/commons-le-cri.jpg",
+    "titles": {
+      "fr": "Le Cri",
+      "en": "The Scream",
+      "ru": "Крик"
+    },
+    "author": "Edvard Munch",
+    "year": "1893",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Scream+Edvard+Munch+1893&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-le-baiser",
+    "imageUrl": "./library/commons-le-baiser.jpg",
+    "titles": {
+      "fr": "Le Baiser",
+      "en": "The Kiss",
+      "ru": "Поцелуй"
+    },
+    "author": "Gustav Klimt",
+    "year": "1907–1908",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Kiss+Gustav+Klimt&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-grande-vague-de-kanagawa",
+    "imageUrl": "./library/commons-la-grande-vague-de-kanagawa.jpg",
+    "titles": {
+      "fr": "La Grande Vague de Kanagawa",
+      "en": "The Great Wave off Kanagawa",
+      "ru": "Большая волна в Канагаве"
+    },
+    "author": "Katsushika Hokusai",
+    "year": "v. 1831",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Great+Wave+off+Kanagawa+Hokusai&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-le-fuji-rouge",
+    "imageUrl": "./library/commons-le-fuji-rouge.jpg",
+    "titles": {
+      "fr": "Le Fuji rouge",
+      "en": "Fine Wind, Clear Morning",
+      "ru": "Красная Фудзи"
+    },
+    "author": "Katsushika Hokusai",
+    "year": "v. 1830–1832",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Fine+Wind+Clear+Morning+Hokusai&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-arrangement-en-gris-et-noir-n1",
+    "imageUrl": "./library/commons-arrangement-en-gris-et-noir-n1.jpg",
+    "titles": {
+      "fr": "Arrangement en gris et noir n°1",
+      "en": "Arrangement in Grey and Black No. 1",
+      "ru": "Аранжировка в сером и чёрном № 1"
+    },
+    "author": "James McNeill Whistler",
+    "year": "1871",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Whistler%27s+Mother&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-voyageur-contemplant-une-mer-de-nuages",
+    "imageUrl": "./library/commons-voyageur-contemplant-une-mer-de-nuages.jpg",
+    "titles": {
+      "fr": "Voyageur contemplant une mer de nuages",
+      "en": "Wanderer above the Sea of Fog",
+      "ru": "Странник над морем тумана"
+    },
+    "author": "Caspar David Friedrich",
+    "year": "v. 1818",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Wanderer+above+the+Sea+of+Fog+Friedrich&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-mer-de-glace",
+    "imageUrl": "./library/commons-la-mer-de-glace.jpg",
+    "titles": {
+      "fr": "La Mer de glace",
+      "en": "The Sea of Ice",
+      "ru": "Море льда"
+    },
+    "author": "Caspar David Friedrich",
+    "year": "1823–1824",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Sea+of+Ice+Friedrich&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-le-moine-au-bord-de-la-mer",
+    "imageUrl": "./library/commons-le-moine-au-bord-de-la-mer.jpg",
+    "titles": {
+      "fr": "Le Moine au bord de la mer",
+      "en": "Monk by the Sea",
+      "ru": "Монах у моря"
+    },
+    "author": "Caspar David Friedrich",
+    "year": "1808–1810",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Monk+by+the+Sea+Friedrich&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-charrette-de-foin",
+    "imageUrl": "./library/commons-la-charrette-de-foin.jpg",
+    "titles": {
+      "fr": "La Charrette de foin",
+      "en": "The Hay Wain",
+      "ru": "Телега для сена"
+    },
+    "author": "John Constable",
+    "year": "1821",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Hay+Wain+Constable&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-le-dernier-voyage-du-tmraire",
+    "imageUrl": "./library/commons-le-dernier-voyage-du-tmraire.jpg",
+    "titles": {
+      "fr": "Le Dernier Voyage du Téméraire",
+      "en": "The Fighting Temeraire",
+      "ru": "Последний рейс корабля «Отважный»"
+    },
+    "author": "J. M. W. Turner",
+    "year": "1839",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Fighting+Temeraire+Turner&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-pluie-vapeur-et-vitesse",
+    "imageUrl": "./library/commons-pluie-vapeur-et-vitesse.jpg",
+    "titles": {
+      "fr": "Pluie, Vapeur et Vitesse",
+      "en": "Rain, Steam and Speed",
+      "ru": "Дождь, пар и скорость"
+    },
+    "author": "J. M. W. Turner",
+    "year": "1844",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Rain+Steam+and+Speed+Turner&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-ophlie",
+    "imageUrl": "./library/override-commons-ophlie.jpg",
+    "titles": {
+      "fr": "Ophélie",
+      "en": "Ophelia",
+      "ru": "Офелия"
+    },
+    "author": "John Everett Millais",
+    "year": "1851-1852",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:John_Everett_Millais_-_Ophelia_-_Google_Art_Project.jpg",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-dame-de-shalott",
+    "imageUrl": "./library/commons-la-dame-de-shalott.jpg",
+    "titles": {
+      "fr": "La Dame de Shalott",
+      "en": "The Lady of Shalott",
+      "ru": "Леди Шалотт"
+    },
+    "author": "John William Waterhouse",
+    "year": "1888",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Lady+of+Shalott+Waterhouse&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-flaming-june",
+    "imageUrl": "./library/commons-flaming-june.jpg",
+    "titles": {
+      "fr": "Flaming June",
+      "en": "Flaming June",
+      "ru": "Пылающий июнь"
+    },
+    "author": "Frederic Leighton",
+    "year": "1895",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Flaming+June+Leighton&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-la-tour-de-babel",
+    "imageUrl": "./library/commons-la-tour-de-babel.jpg",
+    "titles": {
+      "fr": "La Tour de Babel",
+      "en": "The Tower of Babel",
+      "ru": "Вавилонская башня"
+    },
+    "author": "Pieter Bruegel l'Ancien",
+    "year": "1563",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Tower+of+Babel+Bruegel&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "commons-chasseurs-dans-la-neige",
+    "imageUrl": "./library/commons-chasseurs-dans-la-neige.jpg",
+    "titles": {
+      "fr": "Chasseurs dans la neige",
+      "en": "Hunters in the Snow",
+      "ru": "Охотники на снегу"
+    },
+    "author": "Pieter Bruegel l'Ancien",
+    "year": "1565",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Hunters+in+the+Snow+Bruegel&title=Special%3AMediaSearch&type=image",
+    "license": "Public Domain",
+    "category": "painting",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-282068",
+    "imageUrl": "./library/override-met-282068.jpg",
+    "titles": {
+      "fr": "Le Taj Mahal",
+      "en": "The Taj Mahal",
+      "ru": "Тадж-Махал"
+    },
+    "author": "Ustad Ahmad Lahori",
+    "year": "1632-1653",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Taj_Mahal_Front.JPG",
+    "license": "CC BY-SA 3.0",
+    "category": "architecture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-10482",
+    "imageUrl": "./library/met-10482.jpg",
+    "titles": {
+      "fr": "Le Parthénon",
+      "en": "The Parthenon",
+      "ru": "Парфенон"
+    },
+    "author": "Frederic Edwin Church",
+    "year": "1871",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/10482",
+    "license": "Public Domain",
+    "category": "architecture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-271707",
+    "imageUrl": "./library/override-met-271707.jpg",
+    "titles": {
+      "fr": "La tour Eiffel",
+      "en": "The Eiffel Tower",
+      "ru": "Эйфелева башня"
+    },
+    "author": "Gustave Eiffel",
+    "year": "1887-1889",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tour_Eiffel_Wikimedia_Commons.jpg",
+    "license": "CC BY-SA 3.0",
+    "category": "architecture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-441357",
+    "imageUrl": "./library/met-441357.jpg",
+    "titles": {
+      "fr": "La grande pyramide de Gizeh",
+      "en": "The Great Pyramid of Giza",
+      "ru": "Великая пирамида Гизы"
+    },
+    "author": "Adrien Dauzats",
+    "year": "après 1830",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/441357",
+    "license": "Public Domain",
+    "category": "architecture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-337538",
+    "imageUrl": "./library/met-337538.jpg",
+    "titles": {
+      "fr": "Le château de Chambord",
+      "en": "Château de Chambord",
+      "ru": "Замок Шамбор"
+    },
+    "author": "Simon Mathurin Lantara",
+    "year": "XVIIIe siècle",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/337538",
+    "license": "Public Domain",
+    "category": "architecture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-437244",
+    "imageUrl": "./library/override-met-437244.jpg",
+    "titles": {
+      "fr": "Le Colisee",
+      "en": "The Colosseum",
+      "ru": "Колизей"
+    },
+    "author": "Architecture romaine antique",
+    "year": "72-80",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Colosseum_romanum.jpg",
+    "license": "CC0",
+    "category": "architecture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-10508",
+    "imageUrl": "./library/met-10508.jpg",
+    "titles": {
+      "fr": "L'Alhambra",
+      "en": "The Alhambra",
+      "ru": "Альгамбра"
+    },
+    "author": "Samuel Colman",
+    "year": "1865",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/10508",
+    "license": "Public Domain",
+    "category": "architecture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-12266",
+    "imageUrl": "./library/override-met-12266.jpg",
+    "titles": {
+      "fr": "Sainte-Sophie",
+      "en": "Hagia Sophia",
+      "ru": "Собор Святой Софии"
+    },
+    "author": "Architecture byzantine",
+    "year": "532-537",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Exterior_of_Hagia_Sophia_12.jpg",
+    "license": "CC BY-SA 4.0",
+    "category": "architecture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-253370",
+    "imageUrl": "./library/override-met-253370.jpg",
+    "titles": {
+      "fr": "David",
+      "en": "David",
+      "ru": "Давид"
+    },
+    "author": "Michel-Ange",
+    "year": "1501-1504",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Michelangelo%27s_David.JPG",
+    "license": "CC BY-SA 3.0",
+    "category": "sculpture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-544450",
+    "imageUrl": "./library/override-met-544450.jpg",
+    "titles": {
+      "fr": "Venus de Milo",
+      "en": "Venus de Milo",
+      "ru": "Венера Милосская"
+    },
+    "author": "Alexandros d'Antioche (attribue)",
+    "year": "v. 130-100 av. J.-C.",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Front_views_of_the_Venus_de_Milo.jpg",
+    "license": "CC BY-SA 4.0",
+    "category": "sculpture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-544442",
+    "imageUrl": "./library/override-met-544442.jpg",
+    "titles": {
+      "fr": "Victoire de Samothrace",
+      "en": "Winged Victory of Samothrace",
+      "ru": "Ника Самофракийская"
+    },
+    "author": "Art grec hellenistique",
+    "year": "v. 190 av. J.-C.",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Winged_Victory_of_Samothrace.jpg",
+    "license": "CC BY-SA 4.0",
+    "category": "sculpture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-255408",
+    "imageUrl": "./library/override-met-255408.jpg",
+    "titles": {
+      "fr": "Le Penseur",
+      "en": "The Thinker",
+      "ru": "Мыслитель"
+    },
+    "author": "Auguste Rodin",
+    "year": "1880-1904",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Thinker%2C_Rodin.jpg",
+    "license": "Public Domain",
+    "category": "sculpture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-75414",
+    "imageUrl": "./library/override-met-75414.jpg",
+    "titles": {
+      "fr": "Discobole",
+      "en": "Discobolus",
+      "ru": "Дискобол"
+    },
+    "author": "Myron (d'apres)",
+    "year": "v. 450 av. J.-C.",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Discobulus.jpg",
+    "license": "CC BY-SA 3.0",
+    "category": "sculpture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-318622",
+    "imageUrl": "./library/override-met-318622.jpg",
+    "titles": {
+      "fr": "Moai de Rapa Nui",
+      "en": "Moai of Rapa Nui",
+      "ru": "Моаи Рапа-Нуи"
+    },
+    "author": "Culture rapanui",
+    "year": "v. 1250-1500",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Moai_Rapa_Nui.jpg",
+    "license": "CC BY-SA 4.0",
+    "category": "sculpture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-310870",
+    "imageUrl": "./library/override-met-310870.jpg",
+    "titles": {
+      "fr": "Guerrier en terre cuite",
+      "en": "Terracotta Warrior",
+      "ru": "Терракотовый воин"
+    },
+    "author": "Art de la dynastie Qin",
+    "year": "IIIe siecle av. J.-C.",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Terracotta_warriors.jpg",
+    "license": "CC BY-SA 4.0",
+    "category": "sculpture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "met-195733",
+    "imageUrl": "./library/override-met-195733.jpg",
+    "titles": {
+      "fr": "Grand Sphinx de Gizeh",
+      "en": "Great Sphinx of Giza",
+      "ru": "Большой сфинкс в Гизе"
+    },
+    "author": "Art de l'Egypte antique",
+    "year": "v. 2500 av. J.-C.",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Great_Sphinx_of_Giza.jpg",
+    "license": "CC BY-SA 2.0",
+    "category": "sculpture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "cc0-borobudur",
+    "imageUrl": "./library/override-cc0-borobudur.jpg",
+    "titles": {
+      "fr": "Borobudur",
+      "en": "Borobudur",
+      "ru": "Боробудур"
+    },
+    "author": "Architecture bouddhique javanaise",
+    "year": "IXe siecle",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stupa_Borobudur.jpg",
+    "license": "CC BY-SA 3.0",
+    "category": "architecture",
+    "fit": "contain",
+    "anchor": "top"
+  },
+  {
+    "id": "pd-angkor-wat",
+    "imageUrl": "./library/override-pd-angkor-wat.jpg",
+    "titles": {
+      "fr": "Angkor Vat",
+      "en": "Angkor Wat",
+      "ru": "Ангкор-Ват"
+    },
+    "author": "Architecture khmere",
+    "year": "XIIe siecle",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Angkor_Wat_in_Cambodia.jpg",
+    "license": "CC0",
+    "category": "architecture",
+    "fit": "contain",
+    "anchor": "top"
+  }
+]
