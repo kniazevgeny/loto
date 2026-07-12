@@ -477,7 +477,21 @@ function App() {
   return (
     <div className="app-shell">
       <section className="mobile-welcome">
-        <div className="mobile-brand"><Grid3X3 size={20} /><span>Loto Art Studio</span></div>
+        <div className="mobile-header">
+          <div className="mobile-brand"><Grid3X3 size={20} /><span>Loto Art Studio</span></div>
+          <div className="mobile-language" role="group" aria-label={t("language")}>
+            {(["en", "fr", "ru"] as const).map((language) => (
+              <button
+                type="button"
+                className={project.language === language ? "active" : ""}
+                key={language}
+                onClick={() => updateProject({ language })}
+              >
+                {language.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
         <WelcomeScreen t={t} onGenerate={regenerate} />
       </section>
       <header className="app-header">

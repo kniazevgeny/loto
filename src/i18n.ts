@@ -1,6 +1,6 @@
 const messages = {
   fr: {
-    projectName: "Nom du projet", importProject: "Importer un projet", exportProject: "Exporter le projet",
+    projectName: "Nom du projet", importProject: "Importer un projet", exportProject: "Exporter le projet", language: "Langue",
     titledTokens: "Jetons titrés", cards: "Cartes", images: "Images", style: "Style", tools: "Outils", print: "Imprimer",
     printSet: "Imprimer le jeu", printBoth: "Imprimez les deux éléments pour obtenir un jeu complet.",
     tokenStep: "Étape 1 · Jetons titrés", tokenStepHelp: "À placer dans le sac et à tirer pendant la partie. Ils affichent l’image, son titre, l’auteur et la date.",
@@ -39,7 +39,7 @@ const messages = {
     layoutOverflow: "La mise en page dépasse le format A4.", card: "Carte",
   },
   en: {
-    projectName: "Project name", importProject: "Import project", exportProject: "Export project",
+    projectName: "Project name", importProject: "Import project", exportProject: "Export project", language: "Language",
     titledTokens: "Titled tokens", cards: "Cards", images: "Images", style: "Style", tools: "Tools", print: "Print",
     printSet: "Print the set", printBoth: "Print both parts to make a complete playable set.",
     tokenStep: "Step 1 · Titled tokens", tokenStepHelp: "Put these in the bag and draw them during play. They show the image, title, author, and date.",
@@ -78,7 +78,7 @@ const messages = {
     layoutOverflow: "The layout exceeds A4.", card: "Card",
   },
   ru: {
-    projectName: "Название проекта", importProject: "Импорт проекта", exportProject: "Экспорт проекта",
+    projectName: "Название проекта", importProject: "Импорт проекта", exportProject: "Экспорт проекта", language: "Язык",
     titledTokens: "Фишки с подписями", cards: "Карточки", images: "Изображения", style: "Стиль", tools: "Инструменты", print: "Печать",
     printSet: "Распечатать комплект", printBoth: "Для полноценной игры нужно распечатать обе части.",
     tokenStep: "Шаг 1 · Фишки с подписями", tokenStepHelp: "Положите их в мешок и вытягивайте во время игры. На них указаны изображение, название, автор и дата.",
