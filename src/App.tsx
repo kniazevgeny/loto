@@ -9,6 +9,7 @@ import {
   Grid3X3,
   ImagePlus,
   Languages,
+  MoveDiagonal2,
   Palette,
   Printer,
   RefreshCw,
@@ -21,7 +22,7 @@ import {
 import { createDefaultProject, defaultDesign, GOOGLE_FONTS } from "./defaults";
 import { loadLatestProject, saveProject } from "./db";
 import { prepareFonts } from "./fonts";
-import { generateCards, validateCard } from "./generator";
+import { generateCards, requiredArtworkPlacements, validateCard } from "./generator";
 import { exportProjectFile, loadBuiltinLibrary, readFileAsDataUrl } from "./library";
 import { tr, type MessageKey } from "./i18n";
 import type { Artwork, Card, Cell, DesignSettings, Project } from "./types";
@@ -61,6 +62,15 @@ function stripHtml(value = "") {
   return element.textContent?.trim() || "";
 }
 
+function loadAspectRatio(imageUrl: string): Promise<number | undefined> {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve(image.naturalWidth && image.naturalHeight ? image.naturalWidth / image.naturalHeight : undefined);
+    image.onerror = () => resolve(undefined);
+    image.src = imageUrl;
+  });
+}
+
 function cardStyle(design: DesignSettings) {
   return {
     "--card-color": design.cardColor,
@@ -98,6 +108,74 @@ function geometryIssue(design: DesignSettings, language: string) {
   return null;
 }
 
+function ResizeHandle({
+  colSpan,
+  rowSpan,
+  label,
+  onResize,
+}: {
+  colSpan: 1 | 2;
+  rowSpan: 1 | 2;
+  label: string;
+  onResize: (colSpan: 1 | 2, rowSpan: 1 | 2) => void;
+}) {
+  const drag = useRef<{ left: number; top: number; cellWidth: number; cellHeight: number } | null>(null);
+  const [preview, setPreview] = useState<[1 | 2, 1 | 2] | null>(null);
+
+  const updatePreview = (clientX: number, clientY: number) => {
+    if (!drag.current) return;
+    const { left, top, cellWidth, cellHeight } = drag.current;
+    const columns = Math.max(1, Math.min(2, Math.ceil((clientX - left) / cellWidth))) as 1 | 2;
+    const rows = Math.max(1, Math.min(2, Math.ceil((clientY - top) / cellHeight))) as 1 | 2;
+    setPreview([columns, rows]);
+  };
+
+  return (
+    <span
+      className={`resize-handle ${preview ? "dragging" : ""}`}
+      title={label}
+      onClick={(event) => event.stopPropagation()}
+      onPointerDown={(event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const cell = event.currentTarget.closest<HTMLElement>(".loto-cell");
+        if (!cell) return;
+        const bounds = cell.getBoundingClientRect();
+        drag.current = {
+          left: bounds.left,
+          top: bounds.top,
+          cellWidth: bounds.width / colSpan,
+          cellHeight: bounds.height / rowSpan,
+        };
+        event.currentTarget.setPointerCapture(event.pointerId);
+        setPreview([colSpan, rowSpan]);
+      }}
+      onPointerMove={(event) => {
+        if (!drag.current) return;
+        event.preventDefault();
+        event.stopPropagation();
+        updatePreview(event.clientX, event.clientY);
+      }}
+      onPointerUp={(event) => {
+        if (!drag.current) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const next = preview || [colSpan, rowSpan];
+        drag.current = null;
+        setPreview(null);
+        onResize(next[0], next[1]);
+      }}
+      onPointerCancel={() => {
+        drag.current = null;
+        setPreview(null);
+      }}
+    >
+      <MoveDiagonal2 size={13} />
+      {preview && <small>{preview[0]}×{preview[1]}</small>}
+    </span>
+  );
+}
+
 function CardView({
   card,
   cardIndex,
@@ -105,6 +183,7 @@ function CardView({
   project,
   selectedCell,
   onSelect,
+  onResize,
 }: {
   card: Card;
   cardIndex: number;
@@ -112,6 +191,7 @@ function CardView({
   project: Project;
   selectedCell: SelectedCell;
   onSelect?: (selection: SelectedCell) => void;
+  onResize?: (cardIndex: number, cellIndex: number, colSpan: 1 | 2, rowSpan: 1 | 2) => void;
 }) {
   const design = project.design;
   return (
@@ -122,13 +202,17 @@ function CardView({
     >
       <div className="card-grid">
         {card.cells.map((cell, cellIndex) => {
+          if (cell.kind === "covered") return null;
           const selected = selectedCell?.cardIndex === cardIndex && selectedCell.cellIndex === cellIndex;
+          const column = cellIndex % 9;
+          const row = Math.floor(cellIndex / 9);
           if (cell.kind === "number") {
             return (
               <button
                 type="button"
                 className={`loto-cell number-cell ${selected ? "selected" : ""}`}
                 key={cellIndex}
+                style={{ gridColumn: column + 1, gridRow: row + 1 }}
                 onClick={() => onSelect?.({ cardIndex, cellIndex })}
               >
                 <span>{cell.number}</span>
@@ -136,13 +220,23 @@ function CardView({
             );
           }
           const artwork = artworks.get(cell.artworkId);
+          const colSpan = cell.colSpan || 1;
+          const rowSpan = cell.rowSpan || 1;
           return (
-            <button
-              type="button"
+            <div
+              role="button"
+              tabIndex={0}
               className={`loto-cell art-cell ${selected ? "selected" : ""}`}
               key={cellIndex}
               title={artwork ? titleFor(artwork, project.language) : ""}
               onClick={() => onSelect?.({ cardIndex, cellIndex })}
+              onKeyDown={(event) => (event.key === "Enter" || event.key === " ") && onSelect?.({ cardIndex, cellIndex })}
+              style={{
+                gridColumn: `${column + 1} / span ${colSpan}`,
+                gridRow: `${row + 1} / span ${rowSpan}`,
+                width: `${colSpan * 30}mm`,
+                height: `${rowSpan * 30}mm`,
+              }}
             >
               {artwork ? (
                 <>
@@ -150,13 +244,14 @@ function CardView({
                     src={artwork.imageUrl}
                     alt=""
                     style={{
-                      objectFit: artwork.fit || "contain",
+                      objectFit: project.design.cardImageFit,
                       objectPosition: "center center",
                     }}
                   />
                 </>
               ) : <span className="missing-art">{tr(project.language, "missingImage")}</span>}
-            </button>
+              {onResize && <ResizeHandle colSpan={colSpan} rowSpan={rowSpan} label={tr(project.language, "resizeArtwork")} onResize={(columns, rows) => onResize(cardIndex, cellIndex, columns, rows)} />}
+            </div>
           );
         })}
       </div>
@@ -190,7 +285,37 @@ function TokenView({ number, artwork, language, design, onArtworkClick }: { numb
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return <label className="field"><span>{label}</span>{children}</label>;
+  return <div className="field"><span>{label}</span>{children}</div>;
+}
+
+function SegmentedControl<T extends string>({
+  value,
+  options,
+  onChange,
+  compact = false,
+  ariaLabel,
+}: {
+  value: T;
+  options: Array<{ value: T; label: string }>;
+  onChange: (value: T) => void;
+  compact?: boolean;
+  ariaLabel: string;
+}) {
+  return (
+    <div className={`segmented-control ${compact ? "compact" : ""}`} role="group" aria-label={ariaLabel}>
+      {options.map((option) => (
+        <button
+          type="button"
+          className={value === option.value ? "active" : ""}
+          aria-pressed={value === option.value}
+          onClick={() => onChange(option.value)}
+          key={option.value}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  );
 }
 
 function RangeField({
@@ -247,6 +372,7 @@ function App() {
   const [printDialogOpen, setPrintDialogOpen] = useState(false);
   const [previewMode, setPreviewMode] = useState<PreviewMode>("cards");
   const [tokenPageIndex, setTokenPageIndex] = useState(0);
+  const [isGenerating, setIsGenerating] = useState(false);
   const importRef = useRef<HTMLInputElement>(null);
 
   const artworks = useMemo(() => [...builtin, ...project.customArtworks], [builtin, project.customArtworks]);
@@ -262,6 +388,7 @@ function App() {
   }, [project.cards]);
   const t = (key: MessageKey) => tr(project.language, key);
   const fitIssue = geometryIssue(project.design, project.language);
+  const requiredArtPlacements = requiredArtworkPlacements(project.cardCount, project.bentoEnabled);
   const tokenItems = useMemo<TokenItem[]>(() => [
     ...Array.from({ length: 90 }, (_, index) => ({ number: index + 1 })),
     ...selectedArtworks.map((artwork) => ({ artwork })),
@@ -278,6 +405,7 @@ function App() {
         setBuiltin(library);
         const next = saved || createDefaultProject();
         next.design = { ...defaultDesign, ...next.design };
+        next.bentoEnabled ??= true;
         if (!next.selectedArtworkIds.length) next.selectedArtworkIds = library.map((item) => item.id);
         setProject(next);
         setStatus(tr(next.language, saved ? "restored" : "newProject"));
@@ -317,18 +445,31 @@ function App() {
   const updateDesign = <K extends keyof DesignSettings>(key: K, value: DesignSettings[K]) =>
     setProject((current) => ({ ...current, design: { ...current.design, [key]: value } }));
 
-  const regenerate = () => {
+  const regenerate = async () => {
     setError(null);
+    setIsGenerating(true);
+    setStatus(t("measuringImages"));
+    const preparedArtworks = await Promise.all(selectedArtworks.map(async (artwork) => (
+      artwork.aspectRatio ? artwork : { ...artwork, aspectRatio: await loadAspectRatio(artwork.imageUrl) }
+    )));
+    const measuredRatios = new Map(preparedArtworks.flatMap((artwork) => artwork.aspectRatio ? [[artwork.id, artwork.aspectRatio] as const] : []));
+    setBuiltin((current) => current.map((artwork) => measuredRatios.has(artwork.id) ? { ...artwork, aspectRatio: measuredRatios.get(artwork.id) } : artwork));
+    setProject((current) => ({
+      ...current,
+      customArtworks: current.customArtworks.map((artwork) => measuredRatios.has(artwork.id) ? { ...artwork, aspectRatio: measuredRatios.get(artwork.id) } : artwork),
+    }));
     const nextSeed = project.seed + 1;
-    const result = generateCards(project.cardCount, selectedArtworks, project.repeatCap, nextSeed);
+    const result = generateCards(project.cardCount, preparedArtworks, project.repeatCap, nextSeed, project.bentoEnabled);
     if (result.issue) {
       setError(`${t("libraryInsufficient")} ${result.issue.additionalImagesNeeded} ${t("imagesNeeded")} ${result.issue.minimumImages}.`);
+      setIsGenerating(false);
       return;
     }
     updateProject({ cards: result.cards, seed: nextSeed });
     setSheetIndex(0);
     setSelectedCell(null);
     setStatus(`${result.cards.length} ${t("cardsGenerated")}`);
+    setIsGenerating(false);
   };
 
   const replaceCell = (artworkId: string) => {
@@ -343,6 +484,73 @@ function App() {
       };
     });
     updateProject({ cards });
+  };
+
+  const resizeArtwork = (cardIndex: number, cellIndex: number, colSpan: 1 | 2, rowSpan: 1 | 2) => {
+    const card = project.cards[cardIndex];
+    const owner = card?.cells[cellIndex];
+    if (!card || owner?.kind !== "art") return;
+    const originRow = Math.floor(cellIndex / 9);
+    const originColumn = cellIndex % 9;
+    if (originColumn + colSpan > 9 || originRow + rowSpan > 3) {
+      setError(t("resizeBlocked"));
+      return;
+    }
+
+    const usedArtworkIds = new Set(
+      card.cells.flatMap((cell, index) => cell.kind === "art" && index !== cellIndex ? [cell.artworkId] : []),
+    );
+    const replacements = selectedArtworks.filter((artwork) => !usedArtworkIds.has(artwork.id) && artwork.id !== owner.artworkId);
+    let replacementIndex = 0;
+    const baseCells: Cell[] = card.cells.map((cell) => {
+      if (cell.kind !== "covered" || cell.ownerIndex !== cellIndex) return cell;
+      const replacement = cell.artworkId || replacements[replacementIndex++]?.id || owner.artworkId;
+      usedArtworkIds.add(replacement);
+      return { kind: "art", artworkId: replacement };
+    });
+
+    const targetIndexes = new Set<number>();
+    for (let rowOffset = 0; rowOffset < rowSpan; rowOffset += 1) {
+      for (let columnOffset = 0; columnOffset < colSpan; columnOffset += 1) {
+        targetIndexes.add((originRow + rowOffset) * 9 + originColumn + columnOffset);
+      }
+    }
+
+    const blocked = [...targetIndexes].some((index) => {
+      if (index === cellIndex) return false;
+      const cell = baseCells[index];
+      return cell.kind !== "art" || (cell.colSpan || 1) > 1 || (cell.rowSpan || 1) > 1;
+    });
+    if (blocked) {
+      setError(t("resizeBlocked"));
+      return;
+    }
+
+    if (colSpan === 2 && rowSpan === 2) {
+      const tooClose = baseCells.some((cell, index) => {
+        if (index === cellIndex || cell.kind !== "art" || (cell.colSpan || 1) !== 2 || (cell.rowSpan || 1) !== 2) return false;
+        const row = Math.floor(index / 9);
+        const column = index % 9;
+        return originColumn - 1 <= column + 1
+          && originColumn + 2 >= column
+          && originRow - 1 <= row + 1
+          && originRow + 2 >= row;
+      });
+      if (tooClose) {
+        setError(t("resizeTooClose"));
+        return;
+      }
+    }
+
+    const nextCells = baseCells.map((cell, index): Cell => {
+      if (index === cellIndex) return { kind: "art", artworkId: owner.artworkId, colSpan, rowSpan };
+      if (!targetIndexes.has(index)) return cell;
+      return { kind: "covered", ownerIndex: cellIndex, artworkId: cell.kind === "art" ? cell.artworkId : undefined };
+    });
+    setError(null);
+    updateProject({
+      cards: project.cards.map((candidate, index) => index === cardIndex ? { ...candidate, cells: nextCells } : candidate),
+    });
   };
 
   const editNumber = (value: number) => {
@@ -371,6 +579,7 @@ function App() {
     const item: Artwork = {
       id: crypto.randomUUID(), imageUrl, titles: { fr: file.name.replace(/\.[^.]+$/, "") },
       author: "", year: "", license: "Custom", custom: true, fit: "contain", anchor: "top",
+      aspectRatio: await loadAspectRatio(imageUrl),
     };
     updateProject({
       customArtworks: [...project.customArtworks, item],
@@ -426,8 +635,9 @@ function App() {
     }
   };
 
-  const importOnlineArtwork = (result: OnlineArtwork) => {
+  const importOnlineArtwork = async (result: OnlineArtwork) => {
     if (project.customArtworks.some((item) => item.id === result.id)) return;
+    const aspectRatio = await loadAspectRatio(result.imageUrl);
     const item: Artwork = {
       id: result.id,
       imageUrl: result.imageUrl,
@@ -440,6 +650,7 @@ function App() {
       custom: true,
       fit: "contain",
       anchor: "top",
+      aspectRatio,
     };
     updateProject({ customArtworks: [...project.customArtworks, item], selectedArtworkIds: [...project.selectedArtworkIds, item.id] });
     setFocusedArtworkId(item.id);
@@ -451,6 +662,7 @@ function App() {
       const data = JSON.parse(await file.text()) as Project;
       if (data.schemaVersion !== 1 || !Array.isArray(data.cards)) throw new Error(t("badProject"));
       data.design = { ...defaultDesign, ...data.design };
+      data.bentoEnabled ??= true;
       setProject(data);
       setStatus(t("imported"));
       setError(null);
@@ -498,7 +710,16 @@ function App() {
         <div className="brand"><Grid3X3 size={19} /><span>Loto Art Studio</span></div>
         <input className="project-name" value={project.name} onChange={(event) => updateProject({ name: event.target.value })} aria-label={t("projectName")} />
         <span className="save-state"><Save size={14} />{status}</span>
-        <label className="header-select"><Languages size={16} /><select value={project.language} onChange={(event) => updateProject({ language: event.target.value })}><option value="fr">Français</option><option value="en">English</option><option value="ru">Русский</option></select></label>
+        <div className="header-language">
+          <Languages size={16} />
+          <SegmentedControl
+            value={project.language}
+            options={[{ value: "fr", label: "FR" }, { value: "en", label: "EN" }, { value: "ru", label: "RU" }]}
+            onChange={(language) => updateProject({ language })}
+            ariaLabel={t("language")}
+            compact
+          />
+        </div>
         <button className="icon-button" title={t("importProject")} onClick={() => importRef.current?.click()}><Upload size={18} /></button>
         <input ref={importRef} hidden type="file" accept="application/json" onChange={(event) => event.target.files?.[0] && handleImport(event.target.files[0])} />
         <button className="icon-button" title={t("exportProject")} onClick={() => exportProjectFile(project, project.name)}><Download size={18} /></button>
@@ -545,8 +766,12 @@ function App() {
                 <Field label={t("cards")}><input type="number" min="2" max="60" step="2" value={project.cardCount} onChange={(event) => updateProject({ cardCount: Math.max(2, Number(event.target.value) || 2) })} /><small className="field-help">{t("cardCountHelp")}</small></Field>
                 <Field label={t("maxRepeats")}><input type="number" min="1" max="20" value={project.repeatCap} onChange={(event) => updateProject({ repeatCap: Math.max(1, Number(event.target.value) || 1) })} /><small className="field-help">{t("repeatHelp")}</small></Field>
               </div>
-              <button className="wide-button" onClick={regenerate}><RefreshCw size={17} />{project.cards.length ? t("regenerate") : t("generate")}</button>
-              <p className="capacity">{selectedArtworks.length} {t("selectedImages")} · {t("capacity")} {selectedArtworks.length * project.repeatCap} / {project.cardCount * 12}</p>
+              <label className="switch-row">
+                <span><strong>{t("bentoLayout")}</strong><small>{t("bentoHelp")}</small></span>
+                <input type="checkbox" checked={project.bentoEnabled} onChange={(event) => updateProject({ bentoEnabled: event.target.checked })} />
+              </label>
+              <button className="wide-button" disabled={isGenerating} onClick={regenerate}><RefreshCw size={17} />{isGenerating ? t("measuringImages") : project.cards.length ? t("regenerate") : t("generate")}</button>
+              <p className="capacity">{selectedArtworks.length} {t("selectedImages")} · {t("capacity")} {selectedArtworks.length * project.repeatCap} / {requiredArtPlacements}</p>
 
               {selected && selectedCell && (
                 <div className="cell-editor">
@@ -555,13 +780,32 @@ function App() {
                     <Field label={`${t("numberColumn")} ${selectedCell.cellIndex % 9 + 1}`}>
                       <input type="number" value={selected.number} onChange={(event) => editNumber(Number(event.target.value))} />
                     </Field>
-                  ) : (
-                    <Field label={t("artwork")}>
-                      <select value={selected.artworkId} onChange={(event) => replaceCell(event.target.value)}>
-                        {selectedArtworks.map((artwork) => <option key={artwork.id} value={artwork.id}>{titleFor(artwork, project.language)}</option>)}
-                      </select>
-                    </Field>
-                  )}
+                  ) : selected.kind === "art" ? (
+                    <>
+                      <Field label={t("artwork")}>
+                        <select value={selected.artworkId} onChange={(event) => replaceCell(event.target.value)}>
+                          {selectedArtworks.map((artwork) => <option key={artwork.id} value={artwork.id}>{titleFor(artwork, project.language)}</option>)}
+                        </select>
+                      </Field>
+                      <Field label={t("artworkSize")}>
+                        <SegmentedControl
+                          value={`${selected.colSpan || 1}x${selected.rowSpan || 1}`}
+                          options={[
+                            { value: "1x1", label: "1×1" },
+                            { value: "2x1", label: `2×1 · ${t("horizontal")}` },
+                            { value: "1x2", label: `1×2 · ${t("vertical")}` },
+                            { value: "2x2", label: "2×2" },
+                          ]}
+                          onChange={(value) => {
+                            const [columns, rows] = value.split("x").map(Number) as [1 | 2, 1 | 2];
+                            resizeArtwork(selectedCell.cardIndex, selectedCell.cellIndex, columns, rows);
+                          }}
+                          ariaLabel={t("artworkSize")}
+                        />
+                        <small className="field-help">{t("dragResizeHelp")}</small>
+                      </Field>
+                    </>
+                  ) : null}
                 </div>
               )}
 
@@ -620,14 +864,21 @@ function App() {
                 ))}
               </div>
               <RangeField label={t("borderWidth")} value={project.design.borderWidthMm} min={0} max={1} step={0.05} unit=" mm" onChange={(value) => updateDesign("borderWidthMm", value)} />
-              <Field label={t("cellShape")}><select value={project.design.cellShape} onChange={(event) => {
-                const shape = event.target.value as DesignSettings["cellShape"];
+              <Field label={t("cellShape")}><SegmentedControl value={project.design.cellShape} options={[
+                { value: "square", label: t("square") },
+                { value: "rounded", label: t("rounded") },
+                { value: "squircle", label: t("squircle") },
+              ]} onChange={(shape) => {
                 updateDesign("cellShape", shape);
                 if (shape !== "square" && project.design.cellRadiusMm < 1) updateDesign("cellRadiusMm", 4);
-              }}><option value="square">{t("square")}</option><option value="rounded">{t("rounded")}</option><option value="squircle">{t("squircle")}</option></select></Field>
+              }} ariaLabel={t("cellShape")} /></Field>
               {project.design.cellShape !== "square" && <RangeField label={project.design.cellShape === "squircle" ? t("squircleCurve") : t("cellRounding")} value={project.design.cellRadiusMm} min={1} max={10} step={0.5} unit=" mm" onChange={(value) => updateDesign("cellRadiusMm", value)} />}
               <RangeField label={t("cardRounding")} value={project.design.cardRadiusMm} min={0} max={8} step={0.5} unit=" mm" onChange={(value) => updateDesign("cardRadiusMm", value)} />
               <RangeField label={t("gradientOpacity")} value={project.design.gradientOpacity} min={0.2} max={1} step={0.02} onChange={(value) => updateDesign("gradientOpacity", value)} />
+              <Field label={t("playingImageFit")}><SegmentedControl value={project.design.cardImageFit} options={[
+                { value: "contain", label: t("fitImage") },
+                { value: "cover", label: t("fillCell") },
+              ]} onChange={(value) => updateDesign("cardImageFit", value)} ariaLabel={t("playingImageFit")} /><small className="field-help">{t("imageFitHelp")}</small></Field>
 
               <h3>{t("geometry")}</h3>
               <RangeField label={t("cardPadding")} value={project.design.cardPaddingMm} min={0} max={5} step={0.5} unit=" mm" onChange={(value) => updateDesign("cardPaddingMm", value)} />
@@ -674,7 +925,7 @@ function App() {
           </div>
         ) : sheets.length ? (
           <div className="a4-preview" style={{ padding: `${project.design.pageMarginYmm}mm ${project.design.pageMarginXmm}mm`, gap: `${project.design.centerGapMm}mm` }}>
-            {sheets[sheetIndex]?.map((card, index) => <CardView key={card.id} card={card} cardIndex={sheetIndex * 2 + index} artworks={artworkMap} project={project} selectedCell={selectedCell} onSelect={(selection) => {
+            {sheets[sheetIndex]?.map((card, index) => <CardView key={card.id} card={card} cardIndex={sheetIndex * 2 + index} artworks={artworkMap} project={project} selectedCell={selectedCell} onResize={resizeArtwork} onSelect={(selection) => {
               setSelectedCell(selection);
               if (!selection) return;
               const cell = project.cards[selection.cardIndex]?.cells[selection.cellIndex];

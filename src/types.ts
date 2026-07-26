@@ -20,6 +20,7 @@ export interface Artwork {
   fit?: ImageFit;
   anchor?: ImageAnchor;
   custom?: boolean;
+  aspectRatio?: number;
 }
 
 export interface NumberCell {
@@ -30,9 +31,17 @@ export interface NumberCell {
 export interface ArtCell {
   kind: "art";
   artworkId: string;
+  colSpan?: 1 | 2;
+  rowSpan?: 1 | 2;
 }
 
-export type Cell = NumberCell | ArtCell;
+export interface CoveredCell {
+  kind: "covered";
+  ownerIndex: number;
+  artworkId?: string;
+}
+
+export type Cell = NumberCell | ArtCell | CoveredCell;
 
 export interface Card {
   id: string;
@@ -57,6 +66,7 @@ export interface DesignSettings {
   pageMarginYmm: number;
   centerGapMm: number;
   gradientOpacity: number;
+  cardImageFit: ImageFit;
   numberFont: string;
   titleFont: string;
   metaFont: string;
@@ -78,6 +88,7 @@ export interface Project {
   seed: number;
   cardCount: number;
   repeatCap: number;
+  bentoEnabled: boolean;
   language: string;
   selectedArtworkIds: string[];
   customArtworks: Artwork[];
