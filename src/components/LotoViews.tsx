@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Grid3X3, MoveDiagonal2, RefreshCw } from "lucide-react";
+import { Grid3X3, Maximize2, MoveDiagonal2, RefreshCw } from "lucide-react";
 import { tr, type MessageKey } from "../i18n";
 import type { Artwork, Card, DesignSettings, Project } from "../types";
 import { SegmentedControl } from "./Controls";
@@ -197,7 +197,18 @@ export function WelcomeScreen({ t, onGenerate }: { t: (key: MessageKey) => strin
         />
         <div className="process-video">
           {media === "demo" ? (
-            <iframe src={`${import.meta.env.BASE_URL}promo.html`} title={t("productDemo")} />
+            <>
+              <iframe src={`${import.meta.env.BASE_URL}promo.html?embed=1`} title={t("productDemo")} />
+              <button
+                type="button"
+                className="promo-launch"
+                title={t("openDemo")}
+                aria-label={t("openDemo")}
+                onClick={() => window.location.assign(`${import.meta.env.BASE_URL}promo.html?from=welcome`)}
+              >
+                <Maximize2 size={18} />
+              </button>
+            </>
           ) : (
             <iframe
               src="https://www.youtube-nocookie.com/embed/jJUMiEiZGrY"

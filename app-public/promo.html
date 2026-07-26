@@ -44,6 +44,29 @@
       }
       .brand-mark i { width: 4px; height: 4px; background: currentColor; border-radius: 1px; }
       .scene.started .brand { opacity: 1; transform: none; }
+      .back {
+        position: absolute;
+        top: 4.2vh;
+        left: 4.6vw;
+        z-index: 10;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        min-height: 36px;
+        padding: 0 12px;
+        border: 1px solid rgba(23, 23, 21, .2);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, .66);
+        color: #171715;
+        font-size: 12px;
+        font-weight: 650;
+        text-decoration: none;
+        backdrop-filter: blur(12px);
+        transition: background-color .2s ease, transform .35s cubic-bezier(.16, 1, .3, 1);
+      }
+      .back:hover { background: white; transform: translateX(-2px); }
+      .scene:not(.embedded) .brand { right: 5vw; left: auto; }
+      .scene.embedded .back { display: none; }
       .copy {
         position: absolute;
         top: 15vh;
@@ -228,7 +251,8 @@
       .replay:hover { background: white; }
       .scene.finished .replay { opacity: 1; transform: none; }
       @media (max-width: 600px) {
-        .brand { top: 4vh; left: 4vw; font-size: 11px; }
+        .brand { top: 4vh; font-size: 11px; }
+        .back { top: 2.8vh; left: 4vw; min-height: 32px; padding: 0 10px; font-size: 10px; }
         .copy { top: 14vh; }
         .copy p { font-size: 22px; }
         .stage { padding-top: 6vh; }
@@ -257,6 +281,7 @@
   </head>
   <body>
     <main class="scene" data-stage="0">
+      <a class="back" href="./" aria-label="Back to Loto Art Studio"><span aria-hidden="true">←</span> Back to studio</a>
       <div class="brand">
         <span class="brand-mark" aria-hidden="true">
           <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
@@ -315,6 +340,7 @@
       }
 
       const scene = document.querySelector(".scene");
+      if (new URLSearchParams(window.location.search).has("embed")) scene.classList.add("embedded");
       const replay = document.querySelector(".replay");
       const schedule = [];
       function later(callback, delay) {
