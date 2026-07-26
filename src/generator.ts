@@ -280,6 +280,13 @@ function aspectScore(artwork: Artwork, spec: BentoSpec) {
   return Math.abs(ratio - 1);
 }
 
+function matchesOrientation(artwork: Artwork, spec: BentoSpec) {
+  const ratio = artwork.aspectRatio || 1;
+  if (spec.colSpan === 2 && spec.rowSpan === 1) return ratio >= 1.15;
+  if (spec.colSpan === 1 && spec.rowSpan === 2) return ratio <= 0.87;
+  return true;
+}
+
 export function generateCards(
   cardCount: number,
   artworks: Artwork[],
@@ -306,16 +313,23 @@ export function generateCards(
       const numberCells = generateNumberCells(artIndexes, random);
       const artOrigins = [...artIndexes].filter((index) => !coveredOwners.has(index));
       const placementByIndex = new Map(placements.map((placement) => [placement.index, placement]));
+      const prioritizedPlacements = [...placements].sort((a, b) =>
+        a.colSpan * a.rowSpan - b.colSpan * b.rowSpan
+      );
       const orderedOrigins = [
-        ...placements.map((placement) => placement.index),
+        ...prioritizedPlacements.map((placement) => placement.index),
         ...shuffle(artOrigins.filter((index) => !placementByIndex.has(index)), random),
       ];
       const cellArtwork = new Map<number, string>();
 
       for (const cellIndex of orderedOrigins) {
         const placement = placementByIndex.get(cellIndex);
-        const candidates = shuffle(artworks, random)
-          .filter((artwork) => !sheetUsed.has(artwork.id) && usage[artwork.id] < repeatCap)
+        const available = shuffle(artworks, random)
+          .filter((artwork) => !sheetUsed.has(artwork.id) && usage[artwork.id] < repeatCap);
+        const oriented = placement
+          ? available.filter((artwork) => matchesOrientation(artwork, placement))
+          : available;
+        const candidates = (oriented.length ? oriented : available)
           .sort((a, b) => {
             const usageDifference = usage[a.id] - usage[b.id];
             if (usageDifference) return usageDifference;
