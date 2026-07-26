@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Grid3X3, MoveDiagonal2, RefreshCw } from "lucide-react";
 import { tr, type MessageKey } from "../i18n";
 import type { Artwork, Card, DesignSettings, Project } from "../types";
+import { SegmentedControl } from "./Controls";
 
 export type SelectedCell = { cardIndex: number; cellIndex: number } | null;
 
@@ -176,20 +177,37 @@ export function TokenView({ number, artwork, language, design, onArtworkClick }:
 }
 
 export function WelcomeScreen({ t, onGenerate }: { t: (key: MessageKey) => string; onGenerate: () => void }) {
+  const [media, setMedia] = useState<"demo" | "process">("demo");
   return (
     <div className="welcome-state">
       <div className="empty-state"><Grid3X3 size={34} /><h2>{t("emptyTitle")}</h2><p>{t("emptyText")}</p><button className="primary-button" onClick={onGenerate}><RefreshCw size={17} />{t("generate24")}</button></div>
       <div className="process-panel">
-        <div className="process-copy"><h2>{t("processVideo")}</h2><p>{t("processDescription")}</p></div>
+        <div className="process-copy">
+          <h2>{media === "demo" ? t("demoTitle") : t("processVideo")}</h2>
+          {media === "process" && <p>{t("processDescription")}</p>}
+        </div>
+        <SegmentedControl
+          value={media}
+          options={[
+            { value: "demo", label: t("productDemo") },
+            { value: "process", label: t("processTab") },
+          ]}
+          onChange={setMedia}
+          ariaLabel={t("welcomeMedia")}
+        />
         <div className="process-video">
-          <iframe
-            src="https://www.youtube-nocookie.com/embed/jJUMiEiZGrY"
-            title={t("processVideo")}
-            loading="lazy"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          />
+          {media === "demo" ? (
+            <iframe src={`${import.meta.env.BASE_URL}promo.html`} title={t("productDemo")} />
+          ) : (
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/jJUMiEiZGrY"
+              title={t("processVideo")}
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          )}
         </div>
       </div>
     </div>

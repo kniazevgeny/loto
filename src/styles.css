@@ -161,7 +161,8 @@ button:disabled { opacity: .38; cursor: default; }
 .empty-state h2 { color: #33312e; font-size: 18px; margin: 13px 0 3px; }
 .empty-state p { margin: 0 0 18px; }
 .process-panel { align-self: center; }
-.process-copy { max-width: 680px; margin-bottom: 12px; }
+.process-panel > .segmented-control { margin-bottom: 10px; }
+.process-copy { max-width: 680px; margin-bottom: 10px; }
 .process-copy h2 { margin: 0 0 5px; color: #33312e; font-size: 17px; }
 .process-copy p { margin: 0; color: #6b6862; font-size: 12px; line-height: 1.45; }
 .process-video { width: 100%; aspect-ratio: 16 / 9; background: #1e1e1c; box-shadow: 0 4px 22px rgba(34, 32, 28, .16); }
