@@ -282,8 +282,8 @@ function aspectScore(artwork: Artwork, spec: BentoSpec) {
 
 function matchesOrientation(artwork: Artwork, spec: BentoSpec) {
   const ratio = artwork.aspectRatio || 1;
-  if (spec.colSpan === 2 && spec.rowSpan === 1) return ratio >= 1.15;
-  if (spec.colSpan === 1 && spec.rowSpan === 2) return ratio <= 0.87;
+  if (spec.colSpan === 2 && spec.rowSpan === 1) return ratio >= 0.9;
+  if (spec.colSpan === 1 && spec.rowSpan === 2) return ratio <= 1.1;
   return true;
 }
 
