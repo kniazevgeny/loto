@@ -114,9 +114,9 @@ function placementsAreSeparated(first: BentoPlacement, second: BentoPlacement) {
     || firstRow + first.rowSpan < secondRow;
 }
 
-function reservedAndBlocked(placements: BentoPlacement[]) {
+function placementSlots(placements: BentoPlacement[]) {
   const reserved = new Set<number>();
-  const blocked = new Set<number>();
+  const preferredNumbers = new Set<number>();
   for (const placement of placements) {
     indexesFor(placement).forEach((index) => reserved.add(index));
     const originRow = Math.floor(placement.index / 9);
@@ -124,11 +124,11 @@ function reservedAndBlocked(placements: BentoPlacement[]) {
     for (let row = 0; row < 3; row += 1) {
       if (row >= originRow && row < originRow + placement.rowSpan) continue;
       for (let columnOffset = 0; columnOffset < placement.colSpan; columnOffset += 1) {
-        blocked.add(row * 9 + originColumn + columnOffset);
+        preferredNumbers.add(row * 9 + originColumn + columnOffset);
       }
     }
   }
-  return { reserved, blocked };
+  return { reserved, preferredNumbers };
 }
 
 function combinations(values: number[], count: number): number[][] {
@@ -156,23 +156,46 @@ function miniatureAdjacencyScore(indexes: number[]) {
   return { adjacentPairs, longestRun };
 }
 
-function chooseMiniatureIndexes(candidates: number[], count: number, random?: () => number) {
+function longestEmptyRun(artColumns: Set<number>) {
+  let longest = 0;
+  let current = 0;
+  for (let column = 0; column < 9; column += 1) {
+    current = artColumns.has(column) ? 0 : current + 1;
+    longest = Math.max(longest, current);
+  }
+  return longest;
+}
+
+function chooseMiniatureIndexes(
+  candidates: number[],
+  count: number,
+  reservedIndexes: number[],
+  preferredNumbers: Set<number>,
+  forbiddenVerticalColumns = new Set<number>(),
+  random?: () => number,
+) {
   const valid = combinations(candidates, count)
-    .filter((indexes) => miniatureAdjacencyScore(indexes).longestRun < 3);
+    .filter((indexes) => miniatureAdjacencyScore(indexes).longestRun < 3)
+    .filter((indexes) => indexes.every((index) => !forbiddenVerticalColumns.has(index % 9)));
   if (!valid.length) return undefined;
   const ordered = random ? shuffle(valid, random) : valid;
-  return ordered.sort((a, b) =>
-    miniatureAdjacencyScore(a).adjacentPairs - miniatureAdjacencyScore(b).adjacentPairs
-  )[0];
+  const score = (indexes: number[]) => {
+    const artColumns = new Set([...reservedIndexes, ...indexes].map((index) => index % 9));
+    return longestEmptyRun(artColumns) * 100
+      + miniatureAdjacencyScore(indexes).adjacentPairs * 10
+      + indexes.filter((index) => preferredNumbers.has(index)).length;
+  };
+  return ordered
+    .map((indexes) => ({ indexes, score: score(indexes) }))
+    .sort((a, b) => a.score - b.score)[0].indexes;
 }
 
 function placementsAreFeasible(placements: BentoPlacement[]) {
-  const { reserved, blocked } = reservedAndBlocked(placements);
+  const { reserved } = placementSlots(placements);
   for (let row = 0; row < 3; row += 1) {
     const rowIndexes = Array.from({ length: 9 }, (_, column) => row * 9 + column);
-    const reservedCount = rowIndexes.filter((index) => reserved.has(index)).length;
-    const candidates = rowIndexes.filter((index) => !reserved.has(index) && !blocked.has(index));
-    if (reservedCount > 4 || !chooseMiniatureIndexes(candidates, 4 - reservedCount)) return false;
+    const reservedIndexes = rowIndexes.filter((index) => reserved.has(index));
+    if (reservedIndexes.length > 3 || rowIndexes.length - reservedIndexes.length < 4 - reservedIndexes.length) return false;
   }
   return true;
 }
@@ -203,9 +226,10 @@ function generateArtMask(
   placements: BentoPlacement[],
   random: () => number,
 ): { artIndexes: Set<number>; coveredOwners: Map<number, number> } {
-  const { reserved, blocked } = reservedAndBlocked(placements);
+  const { reserved, preferredNumbers } = placementSlots(placements);
   const artIndexes = new Set(reserved);
   const coveredOwners = new Map<number, number>();
+  const miniatureColumns: Array<Set<number>> = [];
 
   for (const placement of placements) {
     indexesFor(placement).forEach((index) => {
@@ -214,11 +238,23 @@ function generateArtMask(
   }
 
   for (let row = 0; row < 3; row += 1) {
-    const existing = [...artIndexes].filter((index) => Math.floor(index / 9) === row).length;
+    const reservedIndexes = [...artIndexes].filter((index) => Math.floor(index / 9) === row);
     const candidates = Array.from({ length: 9 }, (_, column) => row * 9 + column)
-      .filter((index) => !artIndexes.has(index) && !blocked.has(index));
-    chooseMiniatureIndexes(candidates, 4 - existing, random)
-      ?.forEach((index) => artIndexes.add(index));
+      .filter((index) => !artIndexes.has(index));
+    const forbiddenVerticalColumns = row === 2
+      ? new Set([...miniatureColumns[0]].filter((column) => miniatureColumns[1].has(column)))
+      : new Set<number>();
+    const selected = chooseMiniatureIndexes(
+      candidates,
+      4 - reservedIndexes.length,
+      reservedIndexes,
+      preferredNumbers,
+      forbiddenVerticalColumns,
+      random,
+    );
+    if (!selected) throw new Error("No valid miniature distribution found");
+    miniatureColumns.push(new Set(selected.map((index) => index % 9)));
+    selected.forEach((index) => artIndexes.add(index));
   }
 
   return { artIndexes, coveredOwners };

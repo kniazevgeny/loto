@@ -1,46 +1,24 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  BookOpen,
-  Check,
   ChevronLeft,
   ChevronRight,
-  Download,
-  Globe2,
   Grid3X3,
-  ImagePlus,
-  Languages,
-  MoveDiagonal2,
-  Palette,
-  Printer,
-  RefreshCw,
-  Save,
-  Settings2,
   Tags,
-  Upload,
   X,
 } from "lucide-react";
-import { createDefaultProject, defaultDesign, GOOGLE_FONTS } from "./defaults";
+import { createDefaultProject, defaultDesign } from "./defaults";
 import { loadLatestProject, saveProject } from "./db";
 import { prepareFonts } from "./fonts";
-import { generateCards, requiredArtworkPlacements, validateCard } from "./generator";
+import { generateCards, requiredArtworkPlacements } from "./generator";
 import { exportProjectFile, loadBuiltinLibrary, readFileAsDataUrl } from "./library";
 import { tr, type MessageKey } from "./i18n";
 import type { Artwork, Card, Cell, DesignSettings, Project } from "./types";
+import { CardView, TokenView, WelcomeScreen, titleFor, type SelectedCell } from "./components/LotoViews";
+import { AppHeader, MobileWelcome, PrintDialog } from "./components/AppChrome";
+import { Sidebar, type OnlineArtwork, type SidebarModel, type Tab } from "./components/Sidebar";
 
-type Tab = "cards" | "library" | "design";
-type SelectedCell = { cardIndex: number; cellIndex: number } | null;
 type PrintMode = "cards" | "tokens";
 type PreviewMode = "cards" | "tokens";
-
-interface OnlineArtwork {
-  id: string;
-  title: string;
-  imageUrl: string;
-  sourceUrl: string;
-  author: string;
-  year: string;
-  license: string;
-}
 
 interface TokenItem {
   number?: number;
@@ -51,10 +29,6 @@ const COLUMN_RANGES: Array<[number, number]> = [
   [1, 9], [10, 19], [20, 29], [30, 39], [40, 49],
   [50, 59], [60, 69], [70, 79], [80, 90],
 ];
-
-function titleFor(artwork: Artwork, language: string) {
-  return artwork.titles[language] || artwork.titles.fr || artwork.titles.en || artwork.titles.ru || artwork.id;
-}
 
 function stripHtml(value = "") {
   const element = document.createElement("div");
@@ -71,32 +45,6 @@ function loadAspectRatio(imageUrl: string): Promise<number | undefined> {
   });
 }
 
-function cardStyle(design: DesignSettings) {
-  return {
-    "--card-color": design.cardColor,
-    "--cell-color": design.cellColor,
-    "--border-color": design.borderColor,
-    "--number-color": design.numberColor,
-    "--title-color": design.titleColor,
-    "--meta-color": design.metaColor,
-    "--border-width": `${design.borderWidthMm}mm`,
-    "--cell-radius": `${design.cellRadiusMm}mm`,
-    "--card-radius": `${design.cardRadiusMm}mm`,
-    "--card-padding": `${design.cardPaddingMm}mm`,
-    "--gradient-opacity": String(design.gradientOpacity),
-    "--number-font": `"${design.numberFont}", Arial, sans-serif`,
-    "--title-font": `"${design.titleFont}", Arial, sans-serif`,
-    "--meta-font": `"${design.metaFont}", Arial, sans-serif`,
-    "--number-size": `${design.numberFontSizePt}pt`,
-    "--title-size": `${design.titleFontSizePt}pt`,
-    "--meta-size": `${design.metaFontSizePt}pt`,
-    "--ornament-color": design.ornamentColor,
-    "--ornament-opacity": String(design.ornamentOpacity),
-    "--ornament-scale": String(design.ornamentScale),
-    "--custom-ornament": design.customOrnament ? `url("${design.customOrnament}")` : "none",
-  } as React.CSSProperties;
-}
-
 function geometryIssue(design: DesignSettings, language: string) {
   const cardWidth = 270 + design.cardPaddingMm * 2;
   const cardHeight = 90 + design.cardPaddingMm * 2;
@@ -106,253 +54,6 @@ function geometryIssue(design: DesignSettings, language: string) {
     return `${tr(language, "layoutOverflow")} ${Math.max(0, widthNeeded - 297).toFixed(1)} × ${Math.max(0, heightNeeded - 210).toFixed(1)} mm.`;
   }
   return null;
-}
-
-function ResizeHandle({
-  colSpan,
-  rowSpan,
-  label,
-  onResize,
-}: {
-  colSpan: 1 | 2;
-  rowSpan: 1 | 2;
-  label: string;
-  onResize: (colSpan: 1 | 2, rowSpan: 1 | 2) => void;
-}) {
-  const drag = useRef<{ left: number; top: number; cellWidth: number; cellHeight: number } | null>(null);
-  const [preview, setPreview] = useState<[1 | 2, 1 | 2] | null>(null);
-
-  const updatePreview = (clientX: number, clientY: number) => {
-    if (!drag.current) return;
-    const { left, top, cellWidth, cellHeight } = drag.current;
-    const columns = Math.max(1, Math.min(2, Math.ceil((clientX - left) / cellWidth))) as 1 | 2;
-    const rows = Math.max(1, Math.min(2, Math.ceil((clientY - top) / cellHeight))) as 1 | 2;
-    setPreview([columns, rows]);
-  };
-
-  return (
-    <span
-      className={`resize-handle ${preview ? "dragging" : ""}`}
-      title={label}
-      onClick={(event) => event.stopPropagation()}
-      onPointerDown={(event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        const cell = event.currentTarget.closest<HTMLElement>(".loto-cell");
-        if (!cell) return;
-        const bounds = cell.getBoundingClientRect();
-        drag.current = {
-          left: bounds.left,
-          top: bounds.top,
-          cellWidth: bounds.width / colSpan,
-          cellHeight: bounds.height / rowSpan,
-        };
-        event.currentTarget.setPointerCapture(event.pointerId);
-        setPreview([colSpan, rowSpan]);
-      }}
-      onPointerMove={(event) => {
-        if (!drag.current) return;
-        event.preventDefault();
-        event.stopPropagation();
-        updatePreview(event.clientX, event.clientY);
-      }}
-      onPointerUp={(event) => {
-        if (!drag.current) return;
-        event.preventDefault();
-        event.stopPropagation();
-        const next = preview || [colSpan, rowSpan];
-        drag.current = null;
-        setPreview(null);
-        onResize(next[0], next[1]);
-      }}
-      onPointerCancel={() => {
-        drag.current = null;
-        setPreview(null);
-      }}
-    >
-      <MoveDiagonal2 size={13} />
-      {preview && <small>{preview[0]}×{preview[1]}</small>}
-    </span>
-  );
-}
-
-function CardView({
-  card,
-  cardIndex,
-  artworks,
-  project,
-  selectedCell,
-  onSelect,
-  onResize,
-}: {
-  card: Card;
-  cardIndex: number;
-  artworks: Map<string, Artwork>;
-  project: Project;
-  selectedCell: SelectedCell;
-  onSelect?: (selection: SelectedCell) => void;
-  onResize?: (cardIndex: number, cellIndex: number, colSpan: 1 | 2, rowSpan: 1 | 2) => void;
-}) {
-  const design = project.design;
-  return (
-    <div
-      className={`loto-card ornament-${design.ornament} shape-${design.cellShape}`}
-      style={cardStyle(design)}
-      data-card={cardIndex + 1}
-    >
-      <div className="card-grid">
-        {card.cells.map((cell, cellIndex) => {
-          if (cell.kind === "covered") return null;
-          const selected = selectedCell?.cardIndex === cardIndex && selectedCell.cellIndex === cellIndex;
-          const column = cellIndex % 9;
-          const row = Math.floor(cellIndex / 9);
-          if (cell.kind === "number") {
-            return (
-              <button
-                type="button"
-                className={`loto-cell number-cell ${selected ? "selected" : ""}`}
-                key={cellIndex}
-                style={{ gridColumn: column + 1, gridRow: row + 1 }}
-                onClick={() => onSelect?.({ cardIndex, cellIndex })}
-              >
-                <span>{cell.number}</span>
-              </button>
-            );
-          }
-          const artwork = artworks.get(cell.artworkId);
-          const colSpan = cell.colSpan || 1;
-          const rowSpan = cell.rowSpan || 1;
-          return (
-            <div
-              role="button"
-              tabIndex={0}
-              className={`loto-cell art-cell ${selected ? "selected" : ""}`}
-              key={cellIndex}
-              title={artwork ? titleFor(artwork, project.language) : ""}
-              onClick={() => onSelect?.({ cardIndex, cellIndex })}
-              onKeyDown={(event) => (event.key === "Enter" || event.key === " ") && onSelect?.({ cardIndex, cellIndex })}
-              style={{
-                gridColumn: `${column + 1} / span ${colSpan}`,
-                gridRow: `${row + 1} / span ${rowSpan}`,
-                width: `${colSpan * 30}mm`,
-                height: `${rowSpan * 30}mm`,
-              }}
-            >
-              {artwork ? (
-                <>
-                  <img
-                    src={artwork.imageUrl}
-                    alt=""
-                    style={{
-                      objectFit: project.design.cardImageFit,
-                      objectPosition: "center center",
-                    }}
-                  />
-                </>
-              ) : <span className="missing-art">{tr(project.language, "missingImage")}</span>}
-              {onResize && <ResizeHandle colSpan={colSpan} rowSpan={rowSpan} label={tr(project.language, "resizeArtwork")} onResize={(columns, rows) => onResize(cardIndex, cellIndex, columns, rows)} />}
-            </div>
-          );
-        })}
-      </div>
-      <span className="card-index">{cardIndex + 1}</span>
-    </div>
-  );
-}
-
-function TokenView({ number, artwork, language, design, onArtworkClick }: { number?: number; artwork?: Artwork; language: string; design: DesignSettings; onArtworkClick?: (artworkId: string) => void }) {
-  return (
-    <div
-      className={`print-token shape-${design.cellShape} ${artwork ? "art-token" : "number-token"} ${artwork && onArtworkClick ? "interactive-token" : ""}`}
-      style={cardStyle(design)}
-      role={artwork && onArtworkClick ? "button" : undefined}
-      tabIndex={artwork && onArtworkClick ? 0 : undefined}
-      onClick={() => artwork && onArtworkClick?.(artwork.id)}
-      onKeyDown={(event) => artwork && onArtworkClick && (event.key === "Enter" || event.key === " ") && onArtworkClick(artwork.id)}
-      title={artwork ? titleFor(artwork, language) : undefined}
-    >
-      {artwork ? (
-        <>
-          <img src={artwork.imageUrl} alt="" style={{ objectFit: artwork.fit || "contain", objectPosition: "center top" }} />
-          <span className="token-label">
-            <strong>{titleFor(artwork, language)}</strong>
-            <small>{[artwork.author, artwork.year].filter(Boolean).join(", ")}</small>
-          </span>
-        </>
-      ) : <span className="token-number">{number}</span>}
-    </div>
-  );
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return <div className="field"><span>{label}</span>{children}</div>;
-}
-
-function SegmentedControl<T extends string>({
-  value,
-  options,
-  onChange,
-  compact = false,
-  ariaLabel,
-}: {
-  value: T;
-  options: Array<{ value: T; label: string }>;
-  onChange: (value: T) => void;
-  compact?: boolean;
-  ariaLabel: string;
-}) {
-  return (
-    <div className={`segmented-control ${compact ? "compact" : ""}`} role="group" aria-label={ariaLabel}>
-      {options.map((option) => (
-        <button
-          type="button"
-          className={value === option.value ? "active" : ""}
-          aria-pressed={value === option.value}
-          onClick={() => onChange(option.value)}
-          key={option.value}
-        >
-          {option.label}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function RangeField({
-  label, value, min, max, step = 1, unit = "", onChange,
-}: {
-  label: string; value: number; min: number; max: number; step?: number; unit?: string;
-  onChange: (value: number) => void;
-}) {
-  return (
-    <Field label={label}>
-      <div className="range-row">
-        <input type="range" min={min} max={max} step={step} value={value} onChange={(event) => onChange(Number(event.target.value))} />
-        <output>{value}{unit}</output>
-      </div>
-    </Field>
-  );
-}
-
-function WelcomeScreen({ t, onGenerate }: { t: (key: MessageKey) => string; onGenerate: () => void }) {
-  return (
-    <div className="welcome-state">
-      <div className="empty-state"><Grid3X3 size={34} /><h2>{t("emptyTitle")}</h2><p>{t("emptyText")}</p><button className="primary-button" onClick={onGenerate}><RefreshCw size={17} />{t("generate24")}</button></div>
-      <div className="process-panel">
-        <div className="process-copy"><h2>{t("processVideo")}</h2><p>{t("processDescription")}</p></div>
-        <div className="process-video">
-          <iframe
-            src="https://www.youtube-nocookie.com/embed/jJUMiEiZGrY"
-            title={t("processVideo")}
-            loading="lazy"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          />
-        </div>
-      </div>
-    </div>
-  );
 }
 
 function App() {
@@ -685,229 +386,35 @@ function App() {
   const filteredLibrary = artworks.filter((artwork) =>
     `${titleFor(artwork, project.language)} ${artwork.author}`.toLowerCase().includes(librarySearch.toLowerCase()),
   );
+  const sidebarModel: SidebarModel = {
+    navigation: { tab, setTab, sheetIndex },
+    project: { value: project, update: updateProject, updateDesign },
+    generation: { isGenerating, regenerate, selectedArtworks, requiredArtPlacements },
+    selection: { selected, selectedCell, setSelectedCell, replaceCell, resizeArtwork, editNumber },
+    library: {
+      artworks, filteredLibrary, search: librarySearch, setSearch: setLibrarySearch,
+      focusedArtworkId, addArtwork, updateArtwork, onlineQuery, setOnlineQuery,
+      onlineStatus, onlineResults, searchCommons, importOnlineArtwork,
+    },
+    fitIssue,
+    t,
+  };
 
   return (
     <div className="app-shell">
-      <section className="mobile-welcome">
-        <div className="mobile-header">
-          <div className="mobile-brand"><Grid3X3 size={20} /><span>Loto Art Studio</span></div>
-          <div className="mobile-language" role="group" aria-label={t("language")}>
-            {(["en", "fr", "ru"] as const).map((language) => (
-              <button
-                type="button"
-                className={project.language === language ? "active" : ""}
-                key={language}
-                onClick={() => updateProject({ language })}
-              >
-                {language.toUpperCase()}
-              </button>
-            ))}
-          </div>
-        </div>
-        <WelcomeScreen t={t} onGenerate={regenerate} />
-      </section>
-      <header className="app-header">
-        <div className="brand"><Grid3X3 size={19} /><span>Loto Art Studio</span></div>
-        <input className="project-name" value={project.name} onChange={(event) => updateProject({ name: event.target.value })} aria-label={t("projectName")} />
-        <span className="save-state"><Save size={14} />{status}</span>
-        <div className="header-language">
-          <Languages size={16} />
-          <SegmentedControl
-            value={project.language}
-            options={[{ value: "fr", label: "FR" }, { value: "en", label: "EN" }, { value: "ru", label: "RU" }]}
-            onChange={(language) => updateProject({ language })}
-            ariaLabel={t("language")}
-            compact
-          />
-        </div>
-        <button className="icon-button" title={t("importProject")} onClick={() => importRef.current?.click()}><Upload size={18} /></button>
-        <input ref={importRef} hidden type="file" accept="application/json" onChange={(event) => event.target.files?.[0] && handleImport(event.target.files[0])} />
-        <button className="icon-button" title={t("exportProject")} onClick={() => exportProjectFile(project, project.name)}><Download size={18} /></button>
-        <button className="primary-button" onClick={() => setPrintDialogOpen(true)}><Printer size={17} />{t("print")}</button>
-      </header>
-
-      {printDialogOpen && (
-        <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setPrintDialogOpen(false)}>
-          <section className="print-dialog" role="dialog" aria-modal="true" aria-labelledby="print-dialog-title">
-            <div className="dialog-header">
-              <div><h2 id="print-dialog-title">{t("printSet")}</h2><p>{t("printBoth")}</p></div>
-              <button className="icon-button" title="Close" onClick={() => setPrintDialogOpen(false)}><X size={17} /></button>
-            </div>
-            <div className="print-steps">
-              <article className="print-step">
-                <div className="step-icon"><Tags size={20} /></div>
-                <div className="step-copy"><h3>{t("tokenStep")}</h3><p>{t("tokenStepHelp")}</p></div>
-                <button className="wide-button" onClick={() => printProject("tokens")}><Printer size={16} />{t("titledTokens")}</button>
-              </article>
-              <article className="print-step">
-                <div className="step-icon"><Grid3X3 size={20} /></div>
-                <div className="step-copy"><h3>{t("cardStep")}</h3><p>{t("cardStepHelp")}</p></div>
-                <button className="wide-button" onClick={() => printProject("cards")}><Printer size={16} />{t("cards")}</button>
-              </article>
-            </div>
-            <p className="lamination-note">{t("laminateTokens")}</p>
-          </section>
-        </div>
-      )}
-
-      <aside className="sidebar">
-        <nav className="tabs" aria-label={t("tools")}>
-          <button className={tab === "cards" ? "active" : ""} onClick={() => setTab("cards")}><BookOpen size={17} />{t("cards")}</button>
-          <button className={tab === "library" ? "active" : ""} onClick={() => setTab("library")}><ImagePlus size={17} />{t("images")}</button>
-          <button className={tab === "design" ? "active" : ""} onClick={() => setTab("design")}><Palette size={17} />{t("style")}</button>
-        </nav>
-
-        <div className="sidebar-content">
-          {tab === "cards" && (
-            <>
-              <div className="section-title"><h2>{t("game")}</h2><span>{project.cardCount} {t("cards").toLowerCase()}</span></div>
-              <p className="control-intro">{t("setHelp")}</p>
-              <div className="two-fields">
-                <Field label={t("cards")}><input type="number" min="2" max="60" step="2" value={project.cardCount} onChange={(event) => updateProject({ cardCount: Math.max(2, Number(event.target.value) || 2) })} /><small className="field-help">{t("cardCountHelp")}</small></Field>
-                <Field label={t("maxRepeats")}><input type="number" min="1" max="20" value={project.repeatCap} onChange={(event) => updateProject({ repeatCap: Math.max(1, Number(event.target.value) || 1) })} /><small className="field-help">{t("repeatHelp")}</small></Field>
-              </div>
-              <label className="switch-row">
-                <span><strong>{t("bentoLayout")}</strong><small>{t("bentoHelp")}</small></span>
-                <input type="checkbox" checked={project.bentoEnabled} onChange={(event) => updateProject({ bentoEnabled: event.target.checked })} />
-              </label>
-              <button className="wide-button" disabled={isGenerating} onClick={regenerate}><RefreshCw size={17} />{isGenerating ? t("measuringImages") : project.cards.length ? t("regenerate") : t("generate")}</button>
-              <p className="capacity">{selectedArtworks.length} {t("selectedImages")} · {t("capacity")} {selectedArtworks.length * project.repeatCap} / {requiredArtPlacements}</p>
-
-              {selected && selectedCell && (
-                <div className="cell-editor">
-                  <div className="section-title"><h2>{t("selectedCell")}</h2><button className="icon-button small" onClick={() => setSelectedCell(null)}><X size={15} /></button></div>
-                  {selected.kind === "number" ? (
-                    <Field label={`${t("numberColumn")} ${selectedCell.cellIndex % 9 + 1}`}>
-                      <input type="number" value={selected.number} onChange={(event) => editNumber(Number(event.target.value))} />
-                    </Field>
-                  ) : selected.kind === "art" ? (
-                    <>
-                      <Field label={t("artwork")}>
-                        <select value={selected.artworkId} onChange={(event) => replaceCell(event.target.value)}>
-                          {selectedArtworks.map((artwork) => <option key={artwork.id} value={artwork.id}>{titleFor(artwork, project.language)}</option>)}
-                        </select>
-                      </Field>
-                      <Field label={t("artworkSize")}>
-                        <SegmentedControl
-                          value={`${selected.colSpan || 1}x${selected.rowSpan || 1}`}
-                          options={[
-                            { value: "1x1", label: "1×1" },
-                            { value: "2x1", label: `2×1 · ${t("horizontal")}` },
-                            { value: "1x2", label: `1×2 · ${t("vertical")}` },
-                            { value: "2x2", label: "2×2" },
-                          ]}
-                          onChange={(value) => {
-                            const [columns, rows] = value.split("x").map(Number) as [1 | 2, 1 | 2];
-                            resizeArtwork(selectedCell.cardIndex, selectedCell.cellIndex, columns, rows);
-                          }}
-                          ariaLabel={t("artworkSize")}
-                        />
-                        <small className="field-help">{t("dragResizeHelp")}</small>
-                      </Field>
-                    </>
-                  ) : null}
-                </div>
-              )}
-
-              {project.cards.length > 0 && (
-                <div className="validation-list">
-                  {project.cards.slice(sheetIndex * 2, sheetIndex * 2 + 2).map((card, index) => {
-                    const validation = validateCard(card);
-                    return <div key={card.id}><Check size={14} />{t("card")} {sheetIndex * 2 + index + 1}: {validation.valid ? t("valid") : t("check")}</div>;
-                  })}
-                </div>
-              )}
-            </>
-          )}
-
-          {tab === "library" && (
-            <>
-              <div className="section-title"><h2>{t("library")}</h2><span>{selectedArtworks.length}/{artworks.length}</span></div>
-              <input className="search" type="search" placeholder={t("localSearch")} value={librarySearch} onChange={(event) => setLibrarySearch(event.target.value)} />
-              <label className="upload-button"><ImagePlus size={17} />{t("addImage")}<input hidden type="file" accept="image/*" onChange={(event) => event.target.files?.[0] && addArtwork(event.target.files[0])} /></label>
-              <div className="online-search">
-                <div className="section-title"><h2><Globe2 size={15} /> {t("globalSearch")}</h2><span>Wikimedia Commons</span></div>
-                <div className="search-action"><input value={onlineQuery} placeholder={t("globalPlaceholder")} onChange={(event) => setOnlineQuery(event.target.value)} onKeyDown={(event) => event.key === "Enter" && searchCommons()} /><button onClick={searchCommons}>{t("search")}</button></div>
-                {onlineStatus && <p>{onlineStatus}</p>}
-                {onlineResults.length > 0 && <div className="online-results">{onlineResults.map((result) => <button key={result.id} onClick={() => importOnlineArtwork(result)} title={`${result.author} · ${result.license}`}><img src={result.imageUrl} alt="" /><span>{result.title}</span><small>{result.license}</small></button>)}</div>}
-              </div>
-              <div className="library-grid">
-                {filteredLibrary.map((artwork) => {
-                  const enabled = project.selectedArtworkIds.includes(artwork.id);
-                  return (
-                    <div data-artwork-id={artwork.id} className={`library-item ${enabled ? "enabled" : ""} ${focusedArtworkId === artwork.id ? "focused" : ""} ${artwork.custom ? "custom" : ""}`} key={artwork.id}>
-                      <button className="library-thumb" onClick={() => updateProject({ selectedArtworkIds: enabled ? project.selectedArtworkIds.filter((id) => id !== artwork.id) : [...project.selectedArtworkIds, artwork.id] })}>
-                        <img src={artwork.imageUrl} alt="" />
-                        <span className="checkmark"><Check size={13} /></span>
-                      </button>
-                      {artwork.custom ? <div className="custom-fields">
-                        <input aria-label={t("title")} placeholder={t("title")} value={titleFor(artwork, project.language)} onChange={(event) => updateArtwork(artwork.id, { titles: { ...artwork.titles, [project.language]: event.target.value } })} />
-                        <input aria-label={t("authorSubtitle")} placeholder={t("authorSubtitle")} value={artwork.author} onChange={(event) => updateArtwork(artwork.id, { author: event.target.value })} />
-                        <input aria-label={t("year")} placeholder={t("year")} value={artwork.year} onChange={(event) => updateArtwork(artwork.id, { year: event.target.value })} />
-                      </div> : <span>{titleFor(artwork, project.language)}</span>}
-                    </div>
-                  );
-                })}
-              </div>
-            </>
-          )}
-
-          {tab === "design" && (
-            <>
-              <div className="section-title"><h2>{t("style")}</h2><Settings2 size={16} /></div>
-              <div className="color-grid">
-                {([
-                  ["cardBackground", "cardColor"], ["cellBackground", "cellColor"], ["border", "borderColor"],
-                  ["numbers", "numberColor"], ["titles", "titleColor"], ["details", "metaColor"],
-                ] as Array<[MessageKey, keyof DesignSettings]>).map(([label, key]) => (
-                  <Field label={t(label)} key={key}><input type="color" value={String(project.design[key])} onChange={(event) => updateDesign(key, event.target.value as never)} /></Field>
-                ))}
-              </div>
-              <RangeField label={t("borderWidth")} value={project.design.borderWidthMm} min={0} max={1} step={0.05} unit=" mm" onChange={(value) => updateDesign("borderWidthMm", value)} />
-              <Field label={t("cellShape")}><SegmentedControl value={project.design.cellShape} options={[
-                { value: "square", label: t("square") },
-                { value: "rounded", label: t("rounded") },
-                { value: "squircle", label: t("squircle") },
-              ]} onChange={(shape) => {
-                updateDesign("cellShape", shape);
-                if (shape !== "square" && project.design.cellRadiusMm < 1) updateDesign("cellRadiusMm", 4);
-              }} ariaLabel={t("cellShape")} /></Field>
-              {project.design.cellShape !== "square" && <RangeField label={project.design.cellShape === "squircle" ? t("squircleCurve") : t("cellRounding")} value={project.design.cellRadiusMm} min={1} max={10} step={0.5} unit=" mm" onChange={(value) => updateDesign("cellRadiusMm", value)} />}
-              <RangeField label={t("cardRounding")} value={project.design.cardRadiusMm} min={0} max={8} step={0.5} unit=" mm" onChange={(value) => updateDesign("cardRadiusMm", value)} />
-              <RangeField label={t("gradientOpacity")} value={project.design.gradientOpacity} min={0.2} max={1} step={0.02} onChange={(value) => updateDesign("gradientOpacity", value)} />
-              <Field label={t("playingImageFit")}><SegmentedControl value={project.design.cardImageFit} options={[
-                { value: "contain", label: t("fitImage") },
-                { value: "cover", label: t("fillCell") },
-              ]} onChange={(value) => updateDesign("cardImageFit", value)} ariaLabel={t("playingImageFit")} /><small className="field-help">{t("imageFitHelp")}</small></Field>
-
-              <h3>{t("geometry")}</h3>
-              <RangeField label={t("cardPadding")} value={project.design.cardPaddingMm} min={0} max={5} step={0.5} unit=" mm" onChange={(value) => updateDesign("cardPaddingMm", value)} />
-              <RangeField label={t("horizontalMargin")} value={project.design.pageMarginXmm} min={5} max={13} step={0.5} unit=" mm" onChange={(value) => updateDesign("pageMarginXmm", value)} />
-              <RangeField label={t("verticalMargin")} value={project.design.pageMarginYmm} min={3} max={10} step={0.5} unit=" mm" onChange={(value) => updateDesign("pageMarginYmm", value)} />
-              <RangeField label={t("cutGap")} value={project.design.centerGapMm} min={0} max={8} step={0.5} unit=" mm" onChange={(value) => updateDesign("centerGapMm", value)} />
-              {fitIssue && <p className="inline-error">{fitIssue}</p>}
-
-              <h3>{t("typography")}</h3>
-              {(["numberFont", "titleFont", "metaFont"] as const).map((key) => (
-                <Field label={key === "numberFont" ? t("numbers") : key === "titleFont" ? t("titles") : t("details")} key={key}>
-                  <input list="font-list" value={project.design[key]} onChange={(event) => updateDesign(key, event.target.value)} />
-                </Field>
-              ))}
-              <datalist id="font-list">{GOOGLE_FONTS.map((font) => <option value={font} key={font} />)}</datalist>
-              <RangeField label={t("numberSize")} value={project.design.numberFontSizePt} min={20} max={48} unit=" pt" onChange={(value) => updateDesign("numberFontSizePt", value)} />
-              <RangeField label={t("titleSize")} value={project.design.titleFontSizePt} min={5} max={12} step={0.2} unit=" pt" onChange={(value) => updateDesign("titleFontSizePt", value)} />
-              <RangeField label={t("detailSize")} value={project.design.metaFontSizePt} min={3.5} max={8} step={0.1} unit=" pt" onChange={(value) => updateDesign("metaFontSizePt", value)} />
-
-              <h3>{t("ornament")}</h3>
-              <Field label={t("motif")}><select value={project.design.ornament} onChange={(event) => updateDesign("ornament", event.target.value as DesignSettings["ornament"])}><option value="none">{t("none")}</option><option value="corner">{t("corners")}</option><option value="frame">{t("doubleFrame")}</option><option value="pattern">{t("subtlePattern")}</option><option value="custom">{t("customImage")}</option></select></Field>
-              <RangeField label={t("opacity")} value={project.design.ornamentOpacity} min={0.05} max={0.6} step={0.01} onChange={(value) => updateDesign("ornamentOpacity", value)} />
-              <RangeField label={t("scale")} value={project.design.ornamentScale} min={0.5} max={2} step={0.05} onChange={(value) => updateDesign("ornamentScale", value)} />
-              <Field label={t("color")}><input type="color" value={project.design.ornamentColor} onChange={(event) => updateDesign("ornamentColor", event.target.value)} /></Field>
-              <label className="upload-button"><Upload size={16} />{t("importOrnament")}<input hidden type="file" accept="image/*" onChange={async (event) => event.target.files?.[0] && updateDesign("customOrnament", await readFileAsDataUrl(event.target.files[0]))} /></label>
-            </>
-          )}
-        </div>
-      </aside>
+      <MobileWelcome project={project} updateProject={updateProject} t={t} onGenerate={regenerate} />
+      <AppHeader
+        project={project}
+        status={status}
+        importRef={importRef}
+        updateProject={updateProject}
+        onImport={handleImport}
+        onExport={() => exportProjectFile(project, project.name)}
+        onPrint={() => setPrintDialogOpen(true)}
+        t={t}
+      />
+      <PrintDialog open={printDialogOpen} onClose={() => setPrintDialogOpen(false)} onPrint={printProject} t={t} />
+      <Sidebar model={sidebarModel} />
 
       <main className="workspace">
         {error && <div className="error-banner"><span>{error}</span><button onClick={() => setError(null)}><X size={15} /></button></div>}
