@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#11110f"/>
+  <g transform="translate(48 48)">
+    <rect width="200" height="200" rx="48" fill="#f5f0e7"/>
+    <text x="100" y="149" fill="#11110f" font-family="DIN Condensed, Helvetica Neue, sans-serif" font-size="140" font-weight="700" text-anchor="middle">7</text>
+
+    <clipPath id="starry"><rect x="216" width="200" height="200" rx="48"/></clipPath>
+    <g clip-path="url(#starry)">
+      <rect x="216" width="200" height="200" fill="#173d73"/>
+      <circle cx="367" cy="47" r="28" fill="#ffd35a"/>
+      <circle cx="367" cy="47" r="14" fill="#f7a638"/>
+      <path d="M218 94C260 62 286 105 326 73C352 53 379 74 411 63" fill="none" stroke="#79b7bd" stroke-width="15" stroke-linecap="round"/>
+      <path d="M226 123C270 92 310 144 359 107C379 92 397 96 421 105" fill="none" stroke="#f2b63f" stroke-width="10" stroke-linecap="round"/>
+      <path d="M216 157L252 126L277 151L316 119L349 151L384 126L416 150V200H216Z" fill="#10243c"/>
+      <path d="M216 177C266 151 306 189 352 164C380 149 399 157 416 166V200H216Z" fill="#0b1828"/>
+      <g fill="#f7e9a8">
+        <circle cx="245" cy="39" r="5"/><circle cx="286" cy="53" r="4"/><circle cx="327" cy="27" r="5"/><circle cx="394" cy="94" r="4"/>
+      </g>
+    </g>
+
+    <clipPath id="wave"><rect y="216" width="200" height="200" rx="48"/></clipPath>
+    <g clip-path="url(#wave)">
+      <rect y="216" width="200" height="200" fill="#ead9b0"/>
+      <circle cx="145" cy="265" r="22" fill="#eeaa3d"/>
+      <path d="M-18 365C24 316 63 330 79 299C95 269 135 274 161 307C180 331 201 330 222 311V416H-18Z" fill="#195777"/>
+      <path d="M-18 381C22 348 52 356 76 328C93 307 111 296 134 303C99 305 94 329 111 343C141 367 179 342 222 326V416H-18Z" fill="#0d304b"/>
+      <path d="M78 301C91 265 130 254 163 279C137 271 118 284 115 307C107 293 94 291 78 301Z" fill="#f7f0dc"/>
+      <path d="M107 306C120 280 147 277 169 294C146 288 135 299 133 318C126 307 118 304 107 306Z" fill="#7fb8c2"/>
+      <g fill="#f7f0dc">
+        <circle cx="61" cy="329" r="7"/><circle cx="82" cy="315" r="6"/><circle cx="144" cy="292" r="6"/><circle cx="174" cy="311" r="8"/>
+      </g>
+    </g>
+
+    <rect x="216" y="216" width="200" height="200" rx="48" fill="#f5f0e7"/>
+    <text x="316" y="360" fill="#11110f" font-family="DIN Condensed, Helvetica Neue, sans-serif" font-size="116" font-weight="700" text-anchor="middle">24</text>
+  </g>
+</svg>

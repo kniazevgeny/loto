@@ -1,5 +1,5 @@
 import type { RefObject } from "react";
-import { Download, Grid3X3, Languages, Printer, Save, Tags, Upload, X } from "lucide-react";
+import { Download, Grid3X3, Languages, Play, Printer, Save, Tags, Upload, X } from "lucide-react";
 import type { MessageKey } from "../i18n";
 import type { Project } from "../types";
 import { SegmentedControl } from "./Controls";
@@ -62,6 +62,7 @@ export function AppHeader({
       <button className="icon-button" title={t("importProject")} onClick={() => importRef.current?.click()}><Upload size={18} /></button>
       <input ref={importRef} hidden type="file" accept="application/json" onChange={(event) => event.target.files?.[0] && onImport(event.target.files[0])} />
       <button className="icon-button" title={t("exportProject")} onClick={onExport}><Download size={18} /></button>
+      <a className="header-action" href={`${import.meta.env.BASE_URL}game?set=default`}><Play size={15} />{t("play")}</a>
       <button className="primary-button" onClick={onPrint}><Printer size={17} />{t("print")}</button>
     </header>
   );

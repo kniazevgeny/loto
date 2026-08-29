@@ -45,6 +45,11 @@ const messages = {
     columnOnly: "Cette colonne accepte uniquement les nombres", libraryInsufficient: "Bibliothèque insuffisante : ajoutez",
     imagesNeeded: "image(s). Nombre minimum requis :", cardsGenerated: "cartes générées", added: "ajouté",
     layoutOverflow: "La mise en page dépasse le format A4.", card: "Carte",
+    play: "Jouer", gameSetup: "Lancer une partie", gameLanguages: "Langues des étiquettes", gameSpeed: "Rythme", secondsPerToken: "s par jeton",
+    estimatedDuration: "Durée estimée :", includeAllNumbers: "Inclure les 90 nombres", startGame: "Commencer", backToEditor: "Retour à l’éditeur",
+    generateToPlay: "Générez un jeu pour jouer.", noGameTokens: "Générez d’abord les cartes pour préparer les jetons de cette partie.", usedTokens: "jetons", allNumbers: "avec les 90 nombres",
+    currentToken: "Jeton en cours", remaining: "restants", previous: "Précédent", next: "Suivant", pause: "Pause", resume: "Reprendre", restart: "Recommencer",
+    playAgain: "Rejouer", gameComplete: "Partie terminée", gameBackToSetup: "Réglages", gameTotalTokens: "Total :", gameArtworks: "Œuvres", gameNumbers: "Nombres", gameReplaceNumbers: "Ajoute les nombres qui ne figurent pas sur les cartes.", addNumbers: "Ajouter des nombres", gameLanguagesHelp: "Choisissez les langues affichées pendant la partie.", slower: "Lent", faster: "Rapide", artworkDuration: "Image", numberDuration: "Nombre", secondsShort: "s", offlinePreparing: "Préparation hors ligne…", offlineReady: "Prêt hors ligne", offlineUnavailable: "Mode hors ligne disponible après publication", offlineFailed: "Préparation hors ligne incomplète", startWithoutOffline: "Commencer sans attendre", endGame: "Terminer la partie", gameWinnerTitle: "Félicitations !", gameWinnerMessage: "Nous avons un gagnant", newRound: "Nouvelle manche", enterFullscreen: "Plein écran", exitFullscreen: "Quitter le plein écran",
   },
   en: {
     projectName: "Project name", importProject: "Import project", exportProject: "Export project", language: "Language",
@@ -92,6 +97,11 @@ const messages = {
     columnOnly: "This column only accepts numbers", libraryInsufficient: "Not enough images: add",
     imagesNeeded: "image(s). Minimum required:", cardsGenerated: "cards generated", added: "added",
     layoutOverflow: "The layout exceeds A4.", card: "Card",
+    play: "Play", gameSetup: "Start a game", gameLanguages: "Label languages", gameSpeed: "Pace", secondsPerToken: "sec per token",
+    estimatedDuration: "Estimated duration:", includeAllNumbers: "Include all 90 numbers", startGame: "Start game", backToEditor: "Back to editor",
+    generateToPlay: "Generate a set to play.", noGameTokens: "Generate cards first to prepare this game’s tokens.", usedTokens: "tokens", allNumbers: "with all 90 numbers",
+    currentToken: "Current token", remaining: "remaining", previous: "Previous", next: "Next", pause: "Pause", resume: "Resume", restart: "Restart",
+    playAgain: "Play again", gameComplete: "Game complete", gameBackToSetup: "Setup", gameTotalTokens: "Total:", gameArtworks: "Artworks", gameNumbers: "Numbers", gameReplaceNumbers: "Adds the numbers that do not appear on the cards.", addNumbers: "Add numbers", gameLanguagesHelp: "Choose the languages shown during play.", slower: "Slower", faster: "Faster", artworkDuration: "Artwork", numberDuration: "Number", secondsShort: "sec", offlinePreparing: "Preparing offline…", offlineReady: "Ready offline", offlineUnavailable: "Offline mode is available after publishing", offlineFailed: "Offline preparation incomplete", startWithoutOffline: "Start without waiting", endGame: "End game", gameWinnerTitle: "Congratulations!", gameWinnerMessage: "We have a winner", newRound: "New round", enterFullscreen: "Enter fullscreen", exitFullscreen: "Exit fullscreen",
   },
   ru: {
     projectName: "Название проекта", importProject: "Импорт проекта", exportProject: "Экспорт проекта", language: "Язык",
@@ -139,6 +149,11 @@ const messages = {
     columnOnly: "В этом столбце допустимы только числа", libraryInsufficient: "Недостаточно изображений: добавьте",
     imagesNeeded: "изображений. Минимум:", cardsGenerated: "карточек создано", added: "добавлено",
     layoutOverflow: "Макет не помещается на A4.", card: "Карточка",
+    play: "Играть", gameSetup: "Начать игру", gameLanguages: "Языки подписей", gameSpeed: "Темп", secondsPerToken: "сек. на фишку",
+    estimatedDuration: "Примерная длительность:", includeAllNumbers: "Включить все 90 чисел", startGame: "Начать игру", backToEditor: "К редактору",
+    generateToPlay: "Создайте комплект, чтобы играть.", noGameTokens: "Сначала создайте карточки, чтобы подготовить фишки для этой игры.", usedTokens: "фишек", allNumbers: "со всеми 90 числами",
+    currentToken: "Текущая фишка", remaining: "осталось", previous: "Назад", next: "Вперёд", pause: "Пауза", resume: "Продолжить", restart: "Начать заново",
+    playAgain: "Сыграть ещё раз", gameComplete: "Игра завершена", gameBackToSetup: "Настройки", gameTotalTokens: "Всего:", gameArtworks: "Изображения", gameNumbers: "Числа", gameReplaceNumbers: "Добавляет числа, которых нет на карточках.", addNumbers: "Добавить числа", gameLanguagesHelp: "Выберите языки подписей для игры.", slower: "Медленнее", faster: "Быстрее", artworkDuration: "Изображение", numberDuration: "Число", secondsShort: "сек.", offlinePreparing: "Подготовка офлайн…", offlineReady: "Готово для игры офлайн", offlineUnavailable: "Офлайн-режим будет доступен после публикации", offlineFailed: "Не всё удалось сохранить офлайн", startWithoutOffline: "Начать, не дожидаясь", endGame: "Завершить игру", gameWinnerTitle: "Поздравляем!", gameWinnerMessage: "У нас есть победитель", newRound: "Новый раунд", enterFullscreen: "На весь экран", exitFullscreen: "Выйти из полноэкранного режима",
   },
 } as const;
 

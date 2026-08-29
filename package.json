@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "check": "tsc -b --pretty false"
+    "check": "tsc -b --pretty false",
+    "check:game": "node scripts/check_game_queue.mjs",
+    "check:game-stage-layout": "node scripts/check_game_stage_layout.mjs",
+    "check:game-ui": "node scripts/check_game_ui.mjs",
+    "check:pwa": "node scripts/check_pwa.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
