@@ -21,6 +21,10 @@ interface BentoPlacement extends BentoSpec {
   index: number;
 }
 
+type ArtworkSpan = "1x1" | "2x1" | "1x2" | "2x2";
+
+type SpanUsage = Record<ArtworkSpan, number>;
+
 function mulberry32(seed: number) {
   return () => {
     let t = (seed += 0x6d2b79f5);
@@ -287,6 +291,15 @@ function matchesOrientation(artwork: Artwork, spec: BentoSpec) {
   return true;
 }
 
+function spanFor(placement: BentoPlacement | undefined): ArtworkSpan {
+  if (!placement) return "1x1";
+  return `${placement.colSpan}x${placement.rowSpan}` as ArtworkSpan;
+}
+
+function emptySpanUsage(): SpanUsage {
+  return { "1x1": 0, "2x1": 0, "1x2": 0, "2x2": 0 };
+}
+
 export function generateCards(
   cardCount: number,
   artworks: Artwork[],
@@ -299,6 +312,9 @@ export function generateCards(
 
   const random = mulberry32(seed);
   const usage: Record<string, number> = Object.fromEntries(artworks.map((item) => [item.id, 0]));
+  const spanUsage: Record<string, SpanUsage> = Object.fromEntries(
+    artworks.map((item) => [item.id, emptySpanUsage()]),
+  );
   const cards: Card[] = [];
   let previousBentoColumn: number | undefined;
 
@@ -324,6 +340,7 @@ export function generateCards(
 
       for (const cellIndex of orderedOrigins) {
         const placement = placementByIndex.get(cellIndex);
+        const span = spanFor(placement);
         const available = shuffle(artworks, random)
           .filter((artwork) => !sheetUsed.has(artwork.id) && usage[artwork.id] < repeatCap);
         const oriented = placement
@@ -331,6 +348,8 @@ export function generateCards(
           : available;
         const candidates = (oriented.length ? oriented : available)
           .sort((a, b) => {
+            const spanDifference = spanUsage[a.id][span] - spanUsage[b.id][span];
+            if (spanDifference) return spanDifference;
             const usageDifference = usage[a.id] - usage[b.id];
             if (usageDifference) return usageDifference;
             return placement ? aspectScore(a, placement) - aspectScore(b, placement) : 0;
@@ -346,6 +365,7 @@ export function generateCards(
         cellArtwork.set(cellIndex, selected.id);
         sheetUsed.add(selected.id);
         usage[selected.id] += 1;
+        spanUsage[selected.id][span] += 1;
       }
 
       const cells: Cell[] = numberCells.map((number, index) => {

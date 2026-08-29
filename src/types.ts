@@ -18,6 +18,7 @@ export interface Artwork {
   license: "Public Domain" | "CC0" | "Custom";
   category?: "painting" | "architecture" | "sculpture" | "custom";
   fit?: ImageFit;
+  playingFit?: ImageFit;
   anchor?: ImageAnchor;
   custom?: boolean;
   aspectRatio?: number;

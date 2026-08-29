@@ -141,7 +141,7 @@ export function CardView({
               onKeyDown={(event) => (event.key === "Enter" || event.key === " ") && onSelect?.({ cardIndex, cellIndex })}
               style={{ gridColumn: `${column + 1} / span ${colSpan}`, gridRow: `${row + 1} / span ${rowSpan}`, width: `${colSpan * 30}mm`, height: `${rowSpan * 30}mm` }}
             >
-              {artwork ? <img src={artwork.imageUrl} alt="" style={{ objectFit: project.design.cardImageFit, objectPosition: "center center" }} /> : <span className="missing-art">{tr(project.language, "missingImage")}</span>}
+              {artwork ? <img src={artwork.imageUrl} alt="" style={{ objectFit: artwork.playingFit || project.design.cardImageFit, objectPosition: "center center" }} /> : <span className="missing-art">{tr(project.language, "missingImage")}</span>}
               {onResize && <ResizeHandle colSpan={colSpan} rowSpan={rowSpan} label={tr(project.language, "resizeArtwork")} onResize={(columns, rows) => onResize(cardIndex, cellIndex, columns, rows)} />}
             </div>
           );

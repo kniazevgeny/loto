@@ -27,7 +27,7 @@ export const defaultDesign: DesignSettings = {
   pageMarginYmm: 7,
   centerGapMm: 4,
   gradientOpacity: 0.76,
-  cardImageFit: "contain",
+  cardImageFit: "cover",
   numberFont: "Arial",
   titleFont: "Inter",
   metaFont: "Inter",

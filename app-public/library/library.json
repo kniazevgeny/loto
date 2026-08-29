@@ -32,16 +32,16 @@
     "anchor": "top"
   },
   {
-    "id": "commons-la-dame-l-hermine",
-    "imageUrl": "./library/commons-la-dame-l-hermine.jpg",
+    "id": "commons-portrait-arnolfini",
+    "imageUrl": "./library/override-commons-portrait-arnolfini-arnolfini.jpg",
     "titles": {
-      "fr": "La Dame à l'hermine",
-      "en": "Lady with an Ermine",
-      "ru": "Дама с горностаем"
+      "fr": "Les Époux Arnolfini",
+      "en": "The Arnolfini Portrait",
+      "ru": "Портрет четы Арнольфини"
     },
-    "author": "Léonard de Vinci",
-    "year": "v. 1489–1491",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Lady+with+an+Ermine+Leonardo+da+Vinci&title=Special%3AMediaSearch&type=image",
+    "author": "Jan van Eyck",
+    "year": "1434",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Van_Eyck_-_Arnolfini_Portrait.jpg",
     "license": "Public Domain",
     "category": "painting",
     "fit": "contain",
@@ -81,7 +81,7 @@
   },
   {
     "id": "commons-le-printemps",
-    "imageUrl": "./library/commons-le-printemps.jpg",
+    "imageUrl": "./library/override-commons-le-printemps-recognizable.jpg",
     "titles": {
       "fr": "Le Printemps",
       "en": "Primavera",
@@ -89,7 +89,7 @@
     },
     "author": "Sandro Botticelli",
     "year": "v. 1480",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Primavera+Botticelli&title=Special%3AMediaSearch&type=image",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Primavera_by_Botticelli.jpg",
     "license": "Public Domain",
     "category": "painting",
     "fit": "contain",
@@ -97,15 +97,15 @@
   },
   {
     "id": "commons-l-cole-d-athnes",
-    "imageUrl": "./library/commons-l-cole-d-athnes.jpg",
+    "imageUrl": "./library/override-commons-l-cole-d-athnes-recognizable.jpg",
     "titles": {
       "fr": "L'École d'Athènes",
       "en": "The School of Athens",
       "ru": "Афинская школа"
     },
-    "author": "Raphaël",
-    "year": "1509–1511",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+School+of+Athens+Raphael&title=Special%3AMediaSearch&type=image",
+    "author": "Raphael",
+    "year": "1509-1511",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_School_of_Athens_by_Raffaello_Sanzio_da_Urbino_in_Vatican.jpg",
     "license": "Public Domain",
     "category": "painting",
     "fit": "contain",
@@ -129,19 +129,20 @@
   },
   {
     "id": "commons-la-transfiguration",
-    "imageUrl": "./library/commons-la-transfiguration.jpg",
+    "imageUrl": "./library/override-commons-la-transfiguration-recognizable.jpg",
     "titles": {
       "fr": "La Transfiguration",
       "en": "The Transfiguration",
       "ru": "Преображение"
     },
-    "author": "Raphaël",
-    "year": "1516–1520",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Transfiguration+Raphael&title=Special%3AMediaSearch&type=image",
+    "author": "Raphael",
+    "year": "1516-1520",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Transfiguration_Raphael.jpg",
     "license": "Public Domain",
     "category": "painting",
     "fit": "contain",
-    "anchor": "top"
+    "anchor": "top",
+    "playingFit": "contain"
   },
   {
     "id": "commons-la-cration-d-adam",
@@ -433,7 +434,7 @@
   },
   {
     "id": "commons-la-grande-odalisque",
-    "imageUrl": "./library/commons-la-grande-odalisque.jpg",
+    "imageUrl": "./library/override-commons-la-grande-odalisque-recognizable.jpg",
     "titles": {
       "fr": "La Grande Odalisque",
       "en": "Grande Odalisque",
@@ -441,11 +442,12 @@
     },
     "author": "Jean-Auguste-Dominique Ingres",
     "year": "1814",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Grande+Odalisque+Ingres&title=Special%3AMediaSearch&type=image",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:La_Grande_Odalisque_-_Jean-Auguste-Dominique_Ingres_-_Mus%C3%A9e_du_Louvre_Peintures_RF_1158.jpg",
     "license": "Public Domain",
     "category": "painting",
     "fit": "contain",
-    "anchor": "top"
+    "anchor": "top",
+    "playingFit": "contain"
   },
   {
     "id": "commons-les-glaneuses",
@@ -753,7 +755,7 @@
   },
   {
     "id": "commons-voyageur-contemplant-une-mer-de-nuages",
-    "imageUrl": "./library/commons-voyageur-contemplant-une-mer-de-nuages.jpg",
+    "imageUrl": "./library/override-commons-voyageur-contemplant-une-mer-de-nuages-recognizable.jpg",
     "titles": {
       "fr": "Voyageur contemplant une mer de nuages",
       "en": "Wanderer above the Sea of Fog",
@@ -761,7 +763,7 @@
     },
     "author": "Caspar David Friedrich",
     "year": "v. 1818",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=Wanderer+above+the+Sea+of+Fog+Friedrich&title=Special%3AMediaSearch&type=image",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Caspar_David_Friedrich_-_Wanderer_above_the_Sea_of_Fog.jpeg",
     "license": "Public Domain",
     "category": "painting",
     "fit": "contain",
@@ -977,16 +979,16 @@
   },
   {
     "id": "met-441357",
-    "imageUrl": "./library/met-441357.jpg",
+    "imageUrl": "./library/override-met-441357-pyramid-v2.jpg",
     "titles": {
       "fr": "La grande pyramide de Gizeh",
       "en": "The Great Pyramid of Giza",
       "ru": "Великая пирамида Гизы"
     },
-    "author": "Adrien Dauzats",
-    "year": "après 1830",
-    "sourceUrl": "https://www.metmuseum.org/art/collection/search/441357",
-    "license": "Public Domain",
+    "author": "Architecture egyptienne",
+    "year": "v. 2560 av. J.-C.",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Great_Pyramid_of_Giza.jpg",
+    "license": "CC BY-SA 4.0",
     "category": "architecture",
     "fit": "contain",
     "anchor": "top"
@@ -1041,7 +1043,7 @@
   },
   {
     "id": "met-12266",
-    "imageUrl": "./library/override-met-12266.jpg",
+    "imageUrl": "./library/override-met-12266-hagia-interior-v3.jpg",
     "titles": {
       "fr": "Sainte-Sophie",
       "en": "Hagia Sophia",
@@ -1049,15 +1051,15 @@
     },
     "author": "Architecture byzantine",
     "year": "532-537",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Exterior_of_Hagia_Sophia_12.jpg",
-    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Central_nave%2C_two_of_the_semidomes_and_three_of_the_archs_where_the_main_dome_rests_on_-_Hagia_Sophia_%288396671116%29.jpg",
+    "license": "CC BY 2.0",
     "category": "architecture",
     "fit": "contain",
     "anchor": "top"
   },
   {
     "id": "met-253370",
-    "imageUrl": "./library/override-met-253370.jpg",
+    "imageUrl": "./library/override-met-253370-recognizable.jpg",
     "titles": {
       "fr": "David",
       "en": "David",
@@ -1065,15 +1067,16 @@
     },
     "author": "Michel-Ange",
     "year": "1501-1504",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Michelangelo%27s_David.JPG",
-    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Michelangelo%2C_David.jpg",
+    "license": "CC BY 2.0",
     "category": "sculpture",
     "fit": "contain",
-    "anchor": "top"
+    "anchor": "top",
+    "playingFit": "contain"
   },
   {
     "id": "met-544450",
-    "imageUrl": "./library/override-met-544450.jpg",
+    "imageUrl": "./library/override-met-544450-recognizable.jpg",
     "titles": {
       "fr": "Venus de Milo",
       "en": "Venus de Milo",
@@ -1081,11 +1084,12 @@
     },
     "author": "Alexandros d'Antioche (attribue)",
     "year": "v. 130-100 av. J.-C.",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Front_views_of_the_Venus_de_Milo.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Venus_de_Milo_-_full_view.jpg",
     "license": "CC BY-SA 4.0",
     "category": "sculpture",
     "fit": "contain",
-    "anchor": "top"
+    "anchor": "top",
+    "playingFit": "contain"
   },
   {
     "id": "met-544442",
@@ -1121,7 +1125,7 @@
   },
   {
     "id": "met-75414",
-    "imageUrl": "./library/override-met-75414.jpg",
+    "imageUrl": "./library/override-met-75414-recognizable.jpg",
     "titles": {
       "fr": "Discobole",
       "en": "Discobolus",
@@ -1129,15 +1133,16 @@
     },
     "author": "Myron (d'apres)",
     "year": "v. 450 av. J.-C.",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Discobulus.jpg",
-    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Discobolus_Lancelotti_Massimo.jpg",
+    "license": "Public Domain",
     "category": "sculpture",
     "fit": "contain",
-    "anchor": "top"
+    "anchor": "top",
+    "playingFit": "contain"
   },
   {
     "id": "met-318622",
-    "imageUrl": "./library/override-met-318622.jpg",
+    "imageUrl": "./library/override-met-318622-moai-v3.jpg",
     "titles": {
       "fr": "Moai de Rapa Nui",
       "en": "Moai of Rapa Nui",
@@ -1145,8 +1150,8 @@
     },
     "author": "Culture rapanui",
     "year": "v. 1250-1500",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Moai_Rapa_Nui.jpg",
-    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mo%C3%A1is.jpg",
+    "license": "Public Domain",
     "category": "sculpture",
     "fit": "contain",
     "anchor": "top"
@@ -1169,7 +1174,7 @@
   },
   {
     "id": "met-195733",
-    "imageUrl": "./library/override-met-195733.jpg",
+    "imageUrl": "./library/override-met-195733-sphinx-v3.jpg",
     "titles": {
       "fr": "Grand Sphinx de Gizeh",
       "en": "Great Sphinx of Giza",
@@ -1177,15 +1182,15 @@
     },
     "author": "Art de l'Egypte antique",
     "year": "v. 2500 av. J.-C.",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Great_Sphinx_of_Giza.jpg",
-    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Great_Sphinx_of_Giza_%28%D8%A3%D8%A8%D9%88_%D8%A7%D9%84%D9%87%D9%88%D9%84%29.jpg",
+    "license": "CC BY-SA 4.0",
     "category": "sculpture",
     "fit": "contain",
     "anchor": "top"
   },
   {
     "id": "cc0-borobudur",
-    "imageUrl": "./library/override-cc0-borobudur.jpg",
+    "imageUrl": "./library/override-cc0-borobudur-borobudur-v3.jpg",
     "titles": {
       "fr": "Borobudur",
       "en": "Borobudur",
@@ -1193,15 +1198,15 @@
     },
     "author": "Architecture bouddhique javanaise",
     "year": "IXe siecle",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stupa_Borobudur.jpg",
-    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Borobudur_stupas_on_upper_terrace.jpg",
+    "license": "CC BY-SA 4.0",
     "category": "architecture",
     "fit": "contain",
     "anchor": "top"
   },
   {
     "id": "pd-angkor-wat",
-    "imageUrl": "./library/override-pd-angkor-wat.jpg",
+    "imageUrl": "./library/override-pd-angkor-wat-angkor-v3.jpg",
     "titles": {
       "fr": "Angkor Vat",
       "en": "Angkor Wat",
@@ -1209,8 +1214,8 @@
     },
     "author": "Architecture khmere",
     "year": "XIIe siecle",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Angkor_Wat_in_Cambodia.jpg",
-    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Angkor_Wat_reflejado_en_un_estanque_08.jpg",
+    "license": "CC BY-SA 4.0",
     "category": "architecture",
     "fit": "contain",
     "anchor": "top"
