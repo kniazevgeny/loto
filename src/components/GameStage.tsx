@@ -55,7 +55,7 @@ export function GameStage({
   if (complete) {
     return (
       <main className="game-page game-stage-page game-complete">
-        <a className="game-brand" href={`${import.meta.env.BASE_URL}game?set=default`}>Loto Art Studio</a>
+        <a className="game-brand" href={`${import.meta.env.BASE_URL}game/?set=default`}>Loto Art Studio</a>
         <section>
           <p className="game-kicker">{endedByWinner ? t("gameWinnerMessage") : `${queue.length} ${t("usedTokens")}`}</p>
           <h1>{endedByWinner ? t("gameWinnerTitle") : t("gameComplete")}</h1>
@@ -72,7 +72,7 @@ export function GameStage({
     <main className={`game-page game-stage-page${paused ? " is-paused" : ""}`} style={{ "--token-duration": `${durationMs}ms` } as CSSProperties} onClick={handleTogglePause}>
       <div className="game-progress"><progress value={activeIndex + 1} max={queue.length} /></div>
       <header className="game-header">
-        <a className="game-brand" href={`${import.meta.env.BASE_URL}game?set=default`} onClick={(event) => event.stopPropagation()}>Loto Art Studio</a>
+        <a className="game-brand" href={`${import.meta.env.BASE_URL}game/?set=default`} onClick={(event) => event.stopPropagation()}>Loto Art Studio</a>
         <div className="game-header-status">
           <div className="game-counter" aria-live="polite">{activeIndex + 1} / {queue.length}</div>
           <button className="game-fullscreen" type="button" aria-label={fullscreen ? t("exitFullscreen") : t("enterFullscreen")} onClick={(event) => { event.stopPropagation(); void toggleFullscreen(); }}>{fullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}</button>

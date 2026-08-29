@@ -2,7 +2,7 @@
 
 A browser-based editor and game companion for custom art loto. It generates playing cards and a matching set of titled drawing tokens, with controls for image selection, repetition, typography, geometry, and print styling.
 
-The companion at `/loto/game?set=default` presents the selected artworks and numbers during play. It supports English, French, and Russian labels, adjustable pacing, fullscreen play, and preloads the round for offline use on the current device.
+The companion at `/loto/game/?set=default` presents the selected artworks and numbers during play. It supports English, French, and Russian labels, adjustable pacing, fullscreen play, and preloads the round for offline use on the current device.
 
 The production build is configured for the `/loto/` URL path.
 

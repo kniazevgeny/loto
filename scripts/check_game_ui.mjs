@@ -88,7 +88,7 @@ assert.doesNotMatch(css, /#5a5750|#555149/);
 assert.equal(css.match(/#6a665e/g).length, 4);
 assert.match(stageSource, /paused && <button className="game-end-button"/);
 assert.match(stageSource, /requestFullscreen/);
-assert.match(stageSource, /game\?set=default/);
+assert.match(stageSource, /game\/\?set=default/);
 assert.match(stageSource, /if \(paused\) setSpeedOpen\(false\)/);
 assert.doesNotMatch(stageSource, /t\("remaining"\)/);
 assert.match(stageSource, /game-stage-page\$\{paused \? " is-paused" : ""\}/);

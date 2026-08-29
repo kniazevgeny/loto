@@ -36,6 +36,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Verify game entry
+        run: npm run check:game-entry
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 

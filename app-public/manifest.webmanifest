@@ -1,9 +1,9 @@
 {
-  "id": "/loto/game",
+  "id": "/loto/game/",
   "name": "Loto + Art",
   "short_name": "Loto + Art",
   "description": "Call artworks and numbers for a game of Loto + Art.",
-  "start_url": "/loto/game?set=default",
+  "start_url": "/loto/game/?set=default",
   "scope": "/loto/",
   "display": "standalone",
   "background_color": "#151514",

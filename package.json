@@ -5,13 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/create_game_entry.mjs",
     "preview": "vite preview",
     "check": "tsc -b --pretty false",
     "check:game": "node scripts/check_game_queue.mjs",
     "check:game-stage-layout": "node scripts/check_game_stage_layout.mjs",
     "check:game-ui": "node scripts/check_game_ui.mjs",
     "check:pwa": "node scripts/check_pwa.mjs",
+    "check:game-entry": "node scripts/check_game_entry.mjs",
     "check:release": "npm run check && node scripts/check_bento_distribution.mjs && node scripts/check_library_images.mjs && npm run check:game && npm run check:game-stage-layout && npm run check:game-ui && npm run check:pwa"
   },
   "dependencies": {

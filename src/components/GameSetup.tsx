@@ -37,7 +37,7 @@ export function GameSetup({
   return (
     <main className="game-page game-setup-page">
       <header className="game-setup-header">
-        <a className="game-brand" href={`${import.meta.env.BASE_URL}game?set=default`}>Loto Art Studio</a>
+        <a className="game-brand" href={`${import.meta.env.BASE_URL}game/?set=default`}>Loto Art Studio</a>
         <div className="game-interface-language" role="group" aria-label={t("language")}>
           {languages.map((item) => <button type="button" key={item} className={interfaceLanguage === item ? "active" : ""} aria-pressed={interfaceLanguage === item} onClick={() => onInterfaceLanguageChange(item)}>{item.toUpperCase()}</button>)}
         </div>
