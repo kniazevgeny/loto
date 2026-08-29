@@ -31,6 +31,11 @@ if (!/width:\s*min\(100%, 460px\)/.test(setupRule)) {
   throw new Error("The setup must retain its compact single-column measure.");
 }
 
+const setupHeaderRule = css.match(/\.game-setup-header \{([^}]*)\}/)?.[1] ?? "";
+if (!/background:\s*#151514/.test(setupHeaderRule) || !/border-bottom:/.test(setupHeaderRule)) {
+  throw new Error("The fixed setup header must be opaque and visually separated from scrolling content.");
+}
+
 if (/\.game-setup\s*\{[^}]*680px/.test(css)) {
   throw new Error("Responsive rules must not widen the compact game setup.");
 }

@@ -20,7 +20,7 @@ execFileSync(tsc, [
   "src/types.ts",
 ], { stdio: "inherit" });
 
-const { buildGameQueue, estimateGameDuration, formatDuration, summarizeGameTokens } = await import(pathToFileURL(path.join(outDir, "game", "queue.js")).href);
+const { buildDefaultGameQueue, buildGameQueue, estimateGameDuration, formatDuration, summarizeGameTokens } = await import(pathToFileURL(path.join(outDir, "game", "queue.js")).href);
 const { remainingFraction, tokenDurationMs, estimateQueueDuration } = await import(pathToFileURL(path.join(outDir, "game", "timing.js")).href);
 const { orientationFromDimensions } = await import(pathToFileURL(path.join(outDir, "game", "media.js")).href);
 
@@ -45,6 +45,8 @@ const project = {
 };
 
 const identity = () => 0;
+assert.equal(typeof buildDefaultGameQueue, "function", "The game must expose a card-independent built-in queue");
+const defaultQueue = buildDefaultGameQueue([...artworks.values()], identity);
 const usedQueue = buildGameQueue(project, artworks, false, identity);
 const allNumberQueue = buildGameQueue(project, artworks, true, identity);
 
@@ -59,6 +61,11 @@ assert.deepEqual(
 assert.equal(usedQueue.length, 4);
 assert.equal(allNumberQueue.filter((item) => item.kind === "number").length, 90);
 assert.equal(allNumberQueue.filter((item) => item.kind === "art").length, 2);
+assert.equal(defaultQueue.filter((item) => item.kind === "number").length, 90);
+assert.deepEqual(
+  new Set(defaultQueue.filter((item) => item.kind === "art").map((item) => item.artwork.id)),
+  new Set(["art-a", "art-b", "unused"]),
+);
 assert.equal(estimateGameDuration(12, 6), 72);
 assert.deepEqual(summarizeGameTokens(usedQueue), { artworks: 2, numbers: 2, total: 4, allNumberTotal: 92 });
 assert.equal(remainingFraction(0, 6000), 1);

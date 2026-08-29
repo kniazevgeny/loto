@@ -10,6 +10,15 @@ export function shuffle<T>(items: T[], random = Math.random) {
   return result;
 }
 
+export function buildDefaultGameQueue(artworks: Artwork[], random = Math.random): GameToken[] {
+  const artTokens: GameToken[] = artworks.map((artwork) => ({ kind: "art", artwork }));
+  const numberTokens: GameToken[] = Array.from(
+    { length: 90 },
+    (_, index) => ({ kind: "number", number: index + 1 }),
+  );
+  return shuffle([...artTokens, ...numberTokens], random);
+}
+
 export function buildGameQueue(
   project: Pick<Project, "cards">,
   artworks: Map<string, Artwork>,

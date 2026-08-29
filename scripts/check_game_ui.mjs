@@ -99,6 +99,8 @@ assert.match(stageSource, /className=\{`\$\{orientation\}\$\{loaded \? " is-read
 assert.match(stageSource, /key=\{`number-\$\{token\.number\}`\}/);
 assert.match(stageSource, /key=\{`number-labels-\$\{token\.number\}`\}/);
 assert.match(pageSource, /durationMs=\{durationMs\}/);
+assert.match(pageSource, /URLSearchParams\(window\.location\.search\)/, "The game route must read its set parameter");
+assert.match(pageSource, /buildDefaultGameQueue\(artworks/, "The default set must use the complete built-in library without cards");
 assert.match(i18nSource, /gameLanguagesHelp: "Выберите языки подписей для игры\."/);
 
 const offlineUrls = offline.collectOfflineUrls({

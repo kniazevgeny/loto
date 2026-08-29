@@ -288,7 +288,7 @@ body:has(.game-page) { min-width: 0; }
 .game-brand { position: fixed; top: 24px; left: 28px; display: inline-flex; align-items: center; gap: 10px; color: #f4f2ed; font-size: 15px; font-weight: 680; text-decoration: none; z-index: 4; }
 .game-brand::before { content: ""; flex: 0 0 auto; width: 15px; height: 15px; background-image: radial-gradient(circle at center, currentColor 1.4px, transparent 1.5px); background-size: 5px 5px; }
 .game-setup-page, .game-loading, .game-complete { display: grid; place-items: center; padding: 88px 24px 40px; }
-.game-setup-header { position: fixed; top: 0; left: 0; right: 0; z-index: 4; height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; }
+.game-setup-header { position: fixed; top: 0; left: 0; right: 0; z-index: 4; height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid #2f2e2a; background: #151514; }
 .game-setup-header .game-brand { position: static; }
 .game-interface-language { display: flex; gap: 4px; }
 .game-interface-language button { position: relative; width: 34px; height: 30px; padding: 0; border: 0; border-radius: 5px; background: transparent; color: #aaa69e; font-size: 10px; font-weight: 750; cursor: pointer; }

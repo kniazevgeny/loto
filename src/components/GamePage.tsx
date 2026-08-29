@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { createDefaultProject, defaultDesign } from "../defaults";
 import { loadLatestProject } from "../db";
-import { buildGameQueue, summarizeGameTokens } from "../game/queue";
+import { buildDefaultGameQueue, buildGameQueue, summarizeGameTokens } from "../game/queue";
 import { collectOfflineUrls, prepareBrowserOfflineGame, type OfflinePreparation } from "../game/offline";
 import { estimateQueueDuration, remainingFraction, tokenDurationMs } from "../game/timing";
 import type { GameSetup as GameSetupValues, GameToken } from "../game/types";
@@ -20,6 +20,8 @@ function defaultSetup(project: Project): GameSetupValues {
 }
 
 export function GamePage() {
+  const setId = useMemo(() => new URLSearchParams(window.location.search).get("set") || "default", []);
+  const isDefaultSet = setId === "default";
   const [project, setProject] = useState<Project | null>(null);
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [setup, setSetup] = useState<GameSetupValues | null>(null);
@@ -36,27 +38,32 @@ export function GamePage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    Promise.all([loadBuiltinLibrary(), loadLatestProject()])
+    Promise.all([loadBuiltinLibrary(), isDefaultSet ? Promise.resolve(undefined) : loadLatestProject()])
       .then(([builtin, saved]) => {
-        const next = saved || createDefaultProject();
+        const next = isDefaultSet ? createDefaultProject() : saved || createDefaultProject();
         next.design = { ...defaultDesign, ...next.design };
         next.bentoEnabled ??= true;
+        if (isDefaultSet) next.selectedArtworkIds = builtin.map((artwork) => artwork.id);
         setProject(next);
         setInterfaceLanguage(next.language === "fr" || next.language === "ru" ? next.language : "en");
         setArtworks([...builtin, ...next.customArtworks]);
         setSetup(defaultSetup(next));
       })
       .catch((reason) => setError(reason instanceof Error ? reason.message : String(reason)));
-  }, []);
+  }, [isDefaultSet]);
 
   useEffect(() => {
     document.documentElement.lang = interfaceLanguage;
   }, [interfaceLanguage]);
 
   const artworkMap = useMemo(() => new Map(artworks.map((artwork) => [artwork.id, artwork])), [artworks]);
-  const usedQueue = useMemo(() => project ? buildGameQueue(project, artworkMap, false, () => 0) : [], [project, artworkMap]);
+  const usedQueue = useMemo(() => project
+    ? isDefaultSet ? buildDefaultGameQueue(artworks, () => 0) : buildGameQueue(project, artworkMap, false, () => 0)
+    : [], [artworkMap, artworks, isDefaultSet, project]);
   const summary = useMemo(() => summarizeGameTokens(usedQueue), [usedQueue]);
-  const previewQueue = useMemo(() => project && setup ? buildGameQueue(project, artworkMap, setup.includeAllNumbers, () => 0) : [], [artworkMap, project, setup]);
+  const previewQueue = useMemo(() => project && setup
+    ? isDefaultSet ? buildDefaultGameQueue(artworks, () => 0) : buildGameQueue(project, artworkMap, setup.includeAllNumbers, () => 0)
+    : [], [artworkMap, artworks, isDefaultSet, project, setup]);
   const t = (key: MessageKey) => tr(interfaceLanguage, key);
 
   useEffect(() => {
@@ -79,7 +86,9 @@ export function GamePage() {
 
   const startGame = () => {
     if (!project || !setup) return;
-    setQueue(buildGameQueue(project, artworkMap, setup.includeAllNumbers));
+    setQueue(isDefaultSet
+      ? buildDefaultGameQueue(artworks)
+      : buildGameQueue(project, artworkMap, setup.includeAllNumbers));
     setActiveIndex(0);
     setPaused(false);
     setElapsedBeforePause(0);
