@@ -3,6 +3,7 @@ import { createDefaultProject, defaultDesign } from "../defaults";
 import { loadLatestProject } from "../db";
 import { buildDefaultGameQueue, buildGameQueue, summarizeGameTokens } from "../game/queue";
 import { collectOfflineUrls, prepareBrowserOfflineGame, type OfflinePreparation } from "../game/offline";
+import { browserFullscreenHost, browserWakeLockHost, enterFullscreen, exitFullscreen, keepScreenAwake } from "../game/screen";
 import { estimateQueueDuration, remainingFraction, tokenDurationMs } from "../game/timing";
 import type { GameSetup as GameSetupValues, GameToken } from "../game/types";
 import { tr, type MessageKey } from "../i18n";
@@ -96,7 +97,13 @@ export function GamePage() {
     setNow(Date.now());
     setPlaying(true);
     setEndedByWinner(false);
+    void enterFullscreen(browserFullscreenHost());
   };
+
+  useEffect(() => {
+    if (!playing) return;
+    return keepScreenAwake(browserWakeLockHost());
+  }, [playing]);
 
   const durationMs = setup && queue[activeIndex] ? tokenDurationMs(queue[activeIndex], setup.secondsPerToken * 1000) : 0;
   const elapsedMs = elapsedBeforePause + (playing && !paused ? Math.max(0, now - tokenStartedAt) : 0);
@@ -169,7 +176,7 @@ export function GamePage() {
     onNext={() => moveTo(activeIndex + 1)}
     onTogglePause={togglePause}
     onRestart={startGame}
-    onBackToSetup={() => { setPlaying(false); setPaused(false); moveTo(0); }}
+    onBackToSetup={() => { setPlaying(false); setPaused(false); moveTo(0); void exitFullscreen(browserFullscreenHost()); }}
     onEndGame={() => { setPaused(true); setEndedByWinner(true); }}
     onSpeedChange={(secondsPerToken) => { setSetup((current) => current ? { ...current, secondsPerToken } : current); setElapsedBeforePause(0); setTokenStartedAt(Date.now()); setNow(Date.now()); }}
   />;

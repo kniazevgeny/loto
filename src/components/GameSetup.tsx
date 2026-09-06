@@ -11,6 +11,7 @@ import { GameSpeedometer } from "./GameSpeedometer";
 type Translate = (key: MessageKey) => string;
 
 const languages = ["en", "fr", "ru"] as const;
+const rules = ["gameRule1", "gameRule2", "gameRule3", "gameRule4", "gameRule5"] as const;
 
 export function GameSetup({
   setup, summary, previewQueue, language, interfaceLanguage, offline, t, onChange, onInterfaceLanguageChange, onStart,
@@ -43,7 +44,10 @@ export function GameSetup({
         </div>
       </header>
       <section className="game-setup" aria-labelledby="game-setup-title">
-        <h1 id="game-setup-title">{t("gameSetup")}</h1>
+        <div className="game-setup-intro">
+          <h1 id="game-setup-title">{t("gameSetup")}</h1>
+          <a className="game-rules-link" href="#game-rules">{t("gameRulesTitle")}</a>
+        </div>
         <div className="game-setup-primary">
           <div className="game-field">
             <span>{t("gameLanguages")}</span>
@@ -85,6 +89,10 @@ export function GameSetup({
         </> : (
           <div className="game-empty"><p>{t("noGameTokens")}</p><a href={import.meta.env.BASE_URL}>{t("backToEditor")}</a></div>
         )}
+        <section className="game-rules" id="game-rules" aria-labelledby="game-rules-title">
+          <h2 id="game-rules-title">{t("gameRulesTitle")}</h2>
+          <ol>{rules.map((rule) => <li key={rule}>{t(rule)}</li>)}</ol>
+        </section>
       </section>
     </main>
   );

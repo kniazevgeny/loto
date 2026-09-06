@@ -15,10 +15,12 @@ execFileSync(tsc, [
   "--outDir", outDir,
   "src/game/pace.ts",
   "src/game/offline.ts",
+  "src/game/screen.ts",
 ], { stdio: "inherit" });
 
 const pace = await import(pathToFileURL(path.join(outDir, "pace.js")).href);
 const offline = await import(pathToFileURL(path.join(outDir, "offline.js")).href);
+const screen = await import(pathToFileURL(path.join(outDir, "screen.js")).href);
 
 assert.equal(pace.sliderValueFromSeconds(12), 0);
 assert.equal(pace.sliderValueFromSeconds(4), 8);
@@ -45,6 +47,64 @@ assert.equal(pace.formatSeconds(3.5, "ru"), "3,5");
 assert.equal(pace.formatSeconds(0.6, "ru"), "0,6");
 assert.equal(pace.formatSeconds(12, "en"), "12");
 
+// Starting a game asks for fullscreen; already being fullscreen must not ask again,
+// and a browser that refuses (or has no fullscreen at all, like Safari on iPhone)
+// must not surface an error into the game.
+{
+  let requests = 0;
+  const granted = { isFullscreen: () => false, request: async () => { requests += 1; }, exit: async () => {} };
+  assert.equal(await screen.enterFullscreen(granted), true);
+  assert.equal(requests, 1);
+
+  assert.equal(await screen.enterFullscreen({ ...granted, isFullscreen: () => true }), false);
+  assert.equal(requests, 1);
+
+  assert.equal(await screen.enterFullscreen({ isFullscreen: () => false, request: async () => { throw new Error("gesture required"); }, exit: async () => {} }), false);
+  assert.equal(await screen.enterFullscreen({ isFullscreen: () => false, request: undefined, exit: async () => {} }), false);
+
+  let exits = 0;
+  assert.equal(await screen.exitFullscreen({ isFullscreen: () => true, request: async () => {}, exit: async () => { exits += 1; } }), true);
+  assert.equal(exits, 1);
+  assert.equal(await screen.exitFullscreen({ isFullscreen: () => false, request: async () => {}, exit: async () => { exits += 1; } }), false);
+  assert.equal(exits, 1);
+}
+
+// A wake lock is dropped by the browser whenever the page hides, so the game has
+// to take a fresh one each time it comes back - otherwise the screen dims partway
+// through a round the caller left running.
+{
+  let visible = true;
+  let taken = 0;
+  let released = 0;
+  const listeners = [];
+  const host = {
+    request: async () => { taken += 1; return { release: async () => { released += 1; } }; },
+    isVisible: () => visible,
+    watchVisibility: (listener) => { listeners.push(listener); return () => listeners.splice(listeners.indexOf(listener), 1); },
+  };
+  const stop = screen.keepScreenAwake(host);
+  await Promise.resolve();
+  assert.equal(taken, 1, "a lock is taken as soon as the game starts");
+
+  visible = false;
+  listeners.forEach((listener) => listener());
+  visible = true;
+  listeners.forEach((listener) => listener());
+  await Promise.resolve();
+  assert.equal(taken, 2, "the lock is retaken after the page comes back");
+
+  listeners.forEach((listener) => listener());
+  await Promise.resolve();
+  assert.equal(taken, 2);
+
+  stop();
+  assert.equal(released, 1, "ending the game releases the lock");
+  assert.equal(listeners.length, 0, "ending the game stops listening");
+
+  const unsupported = screen.keepScreenAwake({ request: undefined, isVisible: () => true, watchVisibility: () => { throw new Error("must not watch"); } });
+  unsupported();
+}
+
 const setupSource = readFileSync(new URL("../src/components/GameSetup.tsx", import.meta.url), "utf8");
 const stageSource = readFileSync(new URL("../src/components/GameStage.tsx", import.meta.url), "utf8");
 const pageSource = readFileSync(new URL("../src/components/GamePage.tsx", import.meta.url), "utf8");
@@ -66,7 +126,19 @@ assert.match(css, /\.game-slider-row input::-webkit-slider-thumb\s*\{[^}]*border
 assert.match(css, /\.game-slider-row input::-moz-range-thumb\s*\{[^}]*border:\s*3px solid #151514/s);
 assert.match(setupSource, /"--pace-fill":/);
 assert.doesNotMatch(css, /#302f2b|#383631/);
-assert.equal(css.match(/#403e39/g).length, 2);
+assert.equal(css.match(/#403e39/g).length, 3);
+assert.match(css, /\.game-rules\s*\{[^}]*border-top:\s*1px solid #403e39/s);
+assert.match(css, /\.game-rules\s*\{[^}]*scroll-margin-top:\s*84px/s);
+assert.match(css, /\.game-rules li\s*\{[^}]*font-size:\s*14px/s);
+assert.match(css, /\.game-rules li::before\s*\{[^}]*content:\s*counter\(game-rule\)/s);
+assert.match(css, /\.game-rules ol\s*\{[^}]*counter-reset:\s*game-rule/s);
+assert.match(css, /\.game-rules-link\s*\{[^}]*min-height:\s*44px/s);
+assert.match(setupSource, /<section className="game-rules" id="game-rules" aria-labelledby="game-rules-title">/);
+assert.match(setupSource, /<a className="game-rules-link" href="#game-rules">\{t\("gameRulesTitle"\)\}<\/a>/);
+assert.match(setupSource, /rules\.map\(\(rule\) => <li key=\{rule\}>\{t\(rule\)\}<\/li>\)/);
+for (const key of ["gameRulesTitle", "gameRule1", "gameRule2", "gameRule3", "gameRule4", "gameRule5"]) {
+  assert.equal(i18nSource.match(new RegExp(`${key}:`, "g")).length, 3, `${key} must be translated in all three locales`);
+}
 assert.match(css, /\.game-token-summary\s*\{[^}]*padding-top:\s*20px/s);
 assert.match(css, /\.game-tags button\s*\{[^}]*min-height:\s*44px/s);
 assert.match(css, /\.game-slider-row\s*\{[^}]*grid-template-columns:\s*44px minmax\(0, 1fr\) 44px/s);
@@ -74,7 +146,9 @@ assert.match(css, /\.game-slider-row button\s*\{[^}]*width:\s*44px;\s*height:\s*
 assert.match(css, /\.game-slider-row button:first-of-type\s*\{[^}]*grid-area:\s*2 \/ 1/s);
 assert.match(css, /\.game-slider-row input\s*\{[^}]*grid-area:\s*2 \/ 2/s);
 assert.match(css, /\.game-token-summary\s*\{[^}]*font-size:\s*13px/s);
-assert.match(css, /\.game-token-summary strong\s*\{[^}]*font-size:\s*20px/s);
+assert.match(css, /\.game-token-summary\s*\{[^}]*display:\s*flex;\s*flex-wrap:\s*wrap/s);
+assert.match(css, /\.game-token-summary strong\s*\{[^}]*font-size:\s*13px/s);
+assert.doesNotMatch(css, /\.game-token-summary span/);
 assert.match(css, /\.game-slider-row \.game-speedometer\s*\{[^}]*width:\s*76px;\s*height:\s*48px/s);
 assert.match(css, /\.game-start, \.game-quiet-button\s*\{[^}]*border-radius:\s*999px/s);
 assert.match(css, /\.game-brand::before\s*\{[^}]*background-size:\s*5px 5px/s);
@@ -99,6 +173,9 @@ assert.match(stageSource, /className=\{`\$\{orientation\}\$\{loaded \? " is-read
 assert.match(stageSource, /key=\{`number-\$\{token\.number\}`\}/);
 assert.match(stageSource, /key=\{`number-labels-\$\{token\.number\}`\}/);
 assert.match(pageSource, /durationMs=\{durationMs\}/);
+assert.match(pageSource, /setEndedByWinner\(false\);\s*\n\s*void enterFullscreen\(browserFullscreenHost\(\)\);/, "fullscreen must be requested inside the start click, not in an effect");
+assert.match(pageSource, /if \(!playing\) return;\s*\n\s*return keepScreenAwake\(browserWakeLockHost\(\)\);/);
+assert.match(pageSource, /onBackToSetup=\{[^}]*void exitFullscreen\(browserFullscreenHost\(\)\)/);
 assert.match(pageSource, /URLSearchParams\(window\.location\.search\)/, "The game route must read its set parameter");
 assert.match(pageSource, /buildDefaultGameQueue\(artworks/, "The default set must use the complete built-in library without cards");
 assert.match(i18nSource, /gameLanguagesHelp: "Выберите языки подписей для игры\."/);

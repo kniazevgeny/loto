@@ -50,6 +50,12 @@ const messages = {
     generateToPlay: "Générez un jeu pour jouer.", noGameTokens: "Générez d’abord les cartes pour préparer les jetons de cette partie.", usedTokens: "jetons", allNumbers: "avec les 90 nombres",
     currentToken: "Jeton en cours", remaining: "restants", previous: "Précédent", next: "Suivant", pause: "Pause", resume: "Reprendre", restart: "Recommencer",
     playAgain: "Rejouer", gameComplete: "Partie terminée", gameBackToSetup: "Réglages", gameTotalTokens: "Total :", gameArtworks: "Œuvres", gameNumbers: "Nombres", gameReplaceNumbers: "Ajoute les nombres qui ne figurent pas sur les cartes.", addNumbers: "Ajouter des nombres", gameLanguagesHelp: "Choisissez les langues affichées pendant la partie.", slower: "Lent", faster: "Rapide", artworkDuration: "Image", numberDuration: "Nombre", secondsShort: "s", offlinePreparing: "Préparation hors ligne…", offlineReady: "Prêt hors ligne", offlineUnavailable: "Mode hors ligne disponible après publication", offlineFailed: "Préparation hors ligne incomplète", startWithoutOffline: "Commencer sans attendre", endGame: "Terminer la partie", gameWinnerTitle: "Félicitations !", gameWinnerMessage: "Nous avons un gagnant", newRound: "Nouvelle manche", enterFullscreen: "Plein écran", exitFullscreen: "Quitter le plein écran",
+    gameRulesTitle: "Comment jouer",
+    gameRule1: "Chaque joueur reçoit deux cartes et un feutre (jeu plastifié) ou des pions (jeu papier).",
+    gameRule2: "Au lancement, les œuvres et les nombres apparaissent à l’écran l’un après l’autre.",
+    gameRule3: "Si l’élément figure sur vos cartes, cochez-le ou posez un pion dessus.",
+    gameRule4: "Le premier joueur qui complète une ligne gagne.",
+    gameRule5: "Réglez la difficulté en changeant le rythme ci-dessus.",
   },
   en: {
     projectName: "Project name", importProject: "Import project", exportProject: "Export project", language: "Language",
@@ -102,6 +108,12 @@ const messages = {
     generateToPlay: "Generate a set to play.", noGameTokens: "Generate cards first to prepare this game’s tokens.", usedTokens: "tokens", allNumbers: "with all 90 numbers",
     currentToken: "Current token", remaining: "remaining", previous: "Previous", next: "Next", pause: "Pause", resume: "Resume", restart: "Restart",
     playAgain: "Play again", gameComplete: "Game complete", gameBackToSetup: "Setup", gameTotalTokens: "Total:", gameArtworks: "Artworks", gameNumbers: "Numbers", gameReplaceNumbers: "Adds the numbers that do not appear on the cards.", addNumbers: "Add numbers", gameLanguagesHelp: "Choose the languages shown during play.", slower: "Slower", faster: "Faster", artworkDuration: "Artwork", numberDuration: "Number", secondsShort: "sec", offlinePreparing: "Preparing offline…", offlineReady: "Ready offline", offlineUnavailable: "Offline mode is available after publishing", offlineFailed: "Offline preparation incomplete", startWithoutOffline: "Start without waiting", endGame: "End game", gameWinnerTitle: "Congratulations!", gameWinnerMessage: "We have a winner", newRound: "New round", enterFullscreen: "Enter fullscreen", exitFullscreen: "Exit fullscreen",
+    gameRulesTitle: "How to play",
+    gameRule1: "Each player gets two cards and a marker (laminated set) or chips (paper set).",
+    gameRule2: "When the game starts, artworks and numbers appear on screen one after another.",
+    gameRule3: "If it is on your cards, mark it or cover it with a chip.",
+    gameRule4: "The first player to complete a row wins.",
+    gameRule5: "Set the difficulty with the pace control above.",
   },
   ru: {
     projectName: "Название проекта", importProject: "Импорт проекта", exportProject: "Экспорт проекта", language: "Язык",
@@ -154,6 +166,12 @@ const messages = {
     generateToPlay: "Создайте комплект, чтобы играть.", noGameTokens: "Сначала создайте карточки, чтобы подготовить фишки для этой игры.", usedTokens: "фишек", allNumbers: "со всеми 90 числами",
     currentToken: "Текущая фишка", remaining: "осталось", previous: "Назад", next: "Вперёд", pause: "Пауза", resume: "Продолжить", restart: "Начать заново",
     playAgain: "Сыграть ещё раз", gameComplete: "Игра завершена", gameBackToSetup: "Настройки", gameTotalTokens: "Всего:", gameArtworks: "Изображения", gameNumbers: "Числа", gameReplaceNumbers: "Добавляет числа, которых нет на карточках.", addNumbers: "Добавить числа", gameLanguagesHelp: "Выберите языки подписей для игры.", slower: "Медленнее", faster: "Быстрее", artworkDuration: "Изображение", numberDuration: "Число", secondsShort: "сек.", offlinePreparing: "Подготовка офлайн…", offlineReady: "Готово для игры офлайн", offlineUnavailable: "Офлайн-режим будет доступен после публикации", offlineFailed: "Не всё удалось сохранить офлайн", startWithoutOffline: "Начать, не дожидаясь", endGame: "Завершить игру", gameWinnerTitle: "Поздравляем!", gameWinnerMessage: "У нас есть победитель", newRound: "Новый раунд", enterFullscreen: "На весь экран", exitFullscreen: "Выйти из полноэкранного режима",
+    gameRulesTitle: "Как играть",
+    gameRule1: "Каждый игрок получает две карточки и маркер (ламинированный набор) или жетоны (бумажный набор).",
+    gameRule2: "После старта на экране одно за другим появляются изображения и числа.",
+    gameRule3: "Если оно есть на ваших карточках — отметьте его или закройте жетоном.",
+    gameRule4: "Побеждает тот, кто первым закроет ряд.",
+    gameRule5: "Регулируйте сложность, меняя темп игры.",
   },
 } as const;
 
