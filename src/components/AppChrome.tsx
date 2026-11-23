@@ -33,7 +33,7 @@ export function MobileWelcome({
 }
 
 export function AppHeader({
-  project, status, importRef, updateProject, onImport, onExport, onPrint, t,
+  project, status, importRef, updateProject, onImport, onExport, onPlay, onPrint, t,
 }: {
   project: Project;
   status: string;
@@ -41,6 +41,7 @@ export function AppHeader({
   updateProject: (patch: Partial<Project>) => void;
   onImport: (file: File) => void;
   onExport: () => void;
+  onPlay: () => void;
   onPrint: () => void;
   t: Translate;
 }) {
@@ -62,7 +63,7 @@ export function AppHeader({
       <button className="icon-button" title={t("importProject")} onClick={() => importRef.current?.click()}><Upload size={18} /></button>
       <input ref={importRef} hidden type="file" accept="application/json" onChange={(event) => event.target.files?.[0] && onImport(event.target.files[0])} />
       <button className="icon-button" title={t("exportProject")} onClick={onExport}><Download size={18} /></button>
-      <a className="header-action" href={`${import.meta.env.BASE_URL}game/?set=default`}><Play size={15} />{t("play")}</a>
+      <button className="header-action" type="button" title={t("gameLocalOnly")} onClick={onPlay}><Play size={15} />{t("playLocal")}</button>
       <button className="primary-button" onClick={onPrint}><Printer size={17} />{t("print")}</button>
     </header>
   );

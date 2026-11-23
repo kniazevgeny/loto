@@ -14,11 +14,13 @@ const languages = ["en", "fr", "ru"] as const;
 const rules = ["gameRule1", "gameRule2", "gameRule3", "gameRule4", "gameRule5"] as const;
 
 export function GameSetup({
-  setup, summary, previewQueue, language, interfaceLanguage, offline, t, onChange, onInterfaceLanguageChange, onStart,
+  setup, summary, previewQueue, gameHref, allowExtraNumbers, language, interfaceLanguage, offline, t, onChange, onInterfaceLanguageChange, onStart,
 }: {
   setup: GameSetupValues;
   summary: GameTokenSummary;
   previewQueue: GameToken[];
+  gameHref: string;
+  allowExtraNumbers: boolean;
   language: string;
   interfaceLanguage: string;
   offline: OfflinePreparation;
@@ -38,7 +40,7 @@ export function GameSetup({
   return (
     <main className="game-page game-setup-page">
       <header className="game-setup-header">
-        <a className="game-brand" href={`${import.meta.env.BASE_URL}game/?set=default`}>Loto Art Studio</a>
+        <a className="game-brand" href={gameHref}>Loto Art Studio</a>
         <div className="game-interface-language" role="group" aria-label={t("language")}>
           {languages.map((item) => <button type="button" key={item} className={interfaceLanguage === item ? "active" : ""} aria-pressed={interfaceLanguage === item} onClick={() => onInterfaceLanguageChange(item)}>{item.toUpperCase()}</button>)}
         </div>
@@ -76,17 +78,16 @@ export function GameSetup({
           <span>{t("gameNumbers")}: <strong>{setup.includeAllNumbers ? 90 : summary.numbers}</strong></span>
           <span>{t("estimatedDuration")} <strong>{formatDuration(estimateQueueDuration(previewQueue, setup.secondsPerToken * 1000) / 1000, language)}</strong></span>
         </div>
-        {summary.numbers < 90 && <label className="game-option">
+        {allowExtraNumbers && summary.total > 0 && summary.numbers < 90 && <label className="game-option">
           <input type="checkbox" checked={setup.includeAllNumbers} onChange={(event) => onChange({ includeAllNumbers: event.target.checked })} />
           <span><strong>{t("addNumbers")}: +{90 - summary.numbers}</strong><small>{t("gameReplaceNumbers")}</small></span>
         </label>}
         {offline.state !== "idle" && <div className={`game-offline-status ${offline.state}`} aria-live="polite">
-          {offline.state === "preparing" ? `${t("offlinePreparing")} ${offline.completed}/${offline.total}` : offline.state === "ready" ? t("offlineReady") : offline.state === "unsupported" ? t("offlineUnavailable") : t("offlineFailed")}
+          {offline.state === "preparing" ? `${t("offlinePreparing")} ${offline.completed}/${offline.total}` : offline.state === "ready" ? t("offlineReady") : offline.state === "unsupported" ? t(import.meta.env.DEV ? "offlineDev" : "offlineUnavailable") : t("offlineFailed")}
         </div>}
-        {summary.total ? <>
-          <button className="game-start" type="button" onClick={onStart} disabled={offline.state === "preparing"}>{t("startGame")}</button>
-          {offline.state === "preparing" && <button className="game-offline-bypass" type="button" onClick={onStart}>{t("startWithoutOffline")}</button>}
-        </> : (
+        {summary.total ? (
+          <button className="game-start" type="button" onClick={onStart}>{t("startGame")}</button>
+        ) : (
           <div className="game-empty"><p>{t("noGameTokens")}</p><a href={import.meta.env.BASE_URL}>{t("backToEditor")}</a></div>
         )}
         <section className="game-rules" id="game-rules" aria-labelledby="game-rules-title">

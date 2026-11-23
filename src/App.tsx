@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { createDefaultProject, defaultDesign } from "./defaults";
 import { loadLatestProject, saveProject } from "./db";
+import { localGameHref } from "./game/source";
 import { prepareFonts } from "./fonts";
 import { generateCards, requiredArtworkPlacements } from "./generator";
 import { exportProjectFile, loadBuiltinLibrary, readFileAsDataUrl } from "./library";
@@ -382,6 +383,15 @@ function App() {
     window.print();
   };
 
+  const playLocalProject = async () => {
+    try {
+      await saveProject({ ...project, updatedAt: new Date().toISOString() });
+      window.location.assign(localGameHref(import.meta.env.BASE_URL, project.id));
+    } catch {
+      setError(t("gameLocalUnavailable"));
+    }
+  };
+
   const selected = selectedCell ? project.cards[selectedCell.cardIndex]?.cells[selectedCell.cellIndex] : null;
   const filteredLibrary = artworks.filter((artwork) =>
     `${titleFor(artwork, project.language)} ${artwork.author}`.toLowerCase().includes(librarySearch.toLowerCase()),
@@ -410,6 +420,7 @@ function App() {
         updateProject={updateProject}
         onImport={handleImport}
         onExport={() => exportProjectFile(project, project.name)}
+        onPlay={() => void playLocalProject()}
         onPrint={() => setPrintDialogOpen(true)}
         t={t}
       />

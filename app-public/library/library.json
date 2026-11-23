@@ -582,12 +582,12 @@
     "imageUrl": "./library/commons-la-nuit-toile.jpg",
     "titles": {
       "fr": "La Nuit étoilée",
-      "en": "The Starry Night",
-      "ru": "Звёздная ночь"
+      "en": "Starry Night over the Rhône",
+      "ru": "Звёздная ночь над Роной"
     },
     "author": "Vincent van Gogh",
-    "year": "1889",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?search=The+Starry+Night+Van+Gogh&title=Special%3AMediaSearch&type=image",
+    "year": "1888",
+    "sourceUrl": "https://www.musee-orsay.fr/en/artworks/la-nuit-etoilee-78696",
     "license": "Public Domain",
     "category": "painting",
     "fit": "contain",

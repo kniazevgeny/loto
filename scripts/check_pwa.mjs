@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
+import { runInNewContext } from "node:vm";
 
 const manifestPath = new URL("../app-public/manifest.webmanifest", import.meta.url);
 assert.ok(existsSync(manifestPath), "PWA manifest should exist");
@@ -37,5 +38,52 @@ assert.match(offlineSource, /loto-art-offline-v2/);
 assert.match(swSource, /loto-art-offline-v2/);
 assert.match(offlineSource, /manifest\.webmanifest/);
 assert.match(offlineSource, /icon-192\.png/);
+
+const root = "https://example.test/loto/";
+const entry = { method: "GET", mode: "navigate", url: `${root}game/?set=default` };
+const cached = new Map([[root, new Response("cached root")], [entry.url, new Response("old shell")]]);
+let network = () => new Response("new shell");
+let failCacheWrite = false;
+let handleFetch;
+runInNewContext(swSource, {
+  URL,
+  self: {
+    location: new URL(root),
+    registration: { scope: root },
+    addEventListener: (name, handler) => { if (name === "fetch") handleFetch = handler; },
+  },
+  fetch: (_, options) => {
+    assert.equal(options.cache, "no-cache");
+    return network();
+  },
+  caches: {
+    match: (request) => cached.get(request.url ?? request)?.clone(),
+    open: () => ({ put: (request, response) => {
+      if (failCacheWrite) throw new Error("cache full");
+      cached.set(request.url, response);
+    } }),
+  },
+});
+const requestPage = (request = entry) => new Promise((resolve) => handleFetch({ request, respondWith: resolve }));
+assert.equal(await (await requestPage()).text(), "new shell");
+network = () => new Response("missing", { status: 404 });
+assert.equal((await requestPage()).status, 404);
+failCacheWrite = true;
+network = () => new Response("newer shell");
+assert.equal(await (await requestPage()).text(), "newer shell");
+network = () => { throw new Error("offline"); };
+assert.equal(await (await requestPage()).text(), "new shell");
+assert.equal(await (await requestPage({ ...entry, url: `${root}game/?set=custom` })).text(), "cached root");
+cached.delete(root);
+await assert.rejects(requestPage({ ...entry, url: `${root}game/?set=custom` }), /offline/);
+const library = { method: "GET", mode: "cors", url: `${root}library/library.json` };
+cached.set(root, new Response("cached root"));
+await assert.rejects(requestPage(library), /offline/, "metadata must not fall back to the HTML shell");
+failCacheWrite = false;
+cached.set(library.url, new Response("old metadata"));
+network = () => new Response("new metadata");
+assert.equal(await (await requestPage(library)).text(), "new metadata");
+network = () => { throw new Error("offline"); };
+assert.equal(await (await requestPage(library)).text(), "new metadata");
 
 console.log("PWA checks passed");

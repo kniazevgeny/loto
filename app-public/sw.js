@@ -17,23 +17,36 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET" || url.origin !== self.location.origin) return;
 
   event.respondWith((async () => {
+    const appRoot = new URL("./", self.registration.scope);
+    const navigation = request.mode === "navigate";
+    if (navigation || url.href === new URL("library/library.json", appRoot).href) {
+      let response;
+      try {
+        response = await fetch(request, { cache: "no-cache" });
+      } catch (error) {
+        const fallback = (await caches.match(request)) ?? (navigation ? await caches.match(appRoot.href) : undefined);
+        if (fallback) return fallback;
+        throw error;
+      }
+      if (response.ok) {
+        try {
+          const cache = await caches.open(CACHE_NAME);
+          await cache.put(request, response.clone());
+        } catch {
+          // Storage failure must not block a successful online navigation.
+        }
+      }
+      return response;
+    }
+
     const cached = await caches.match(request);
     if (cached) return cached;
 
-    try {
-      const response = await fetch(request);
-      if (response.ok) {
-        const cache = await caches.open(CACHE_NAME);
-        await cache.put(request, response.clone());
-      }
-      return response;
-    } catch (error) {
-      if (request.mode === "navigate") {
-        const appRoot = new URL("./", self.registration.scope).href;
-        const fallback = await caches.match(appRoot);
-        if (fallback) return fallback;
-      }
-      throw error;
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(CACHE_NAME);
+      await cache.put(request, response.clone());
     }
+    return response;
   })());
 });

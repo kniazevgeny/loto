@@ -1,10 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
-import { createDefaultProject, defaultDesign } from "../defaults";
-import { loadLatestProject } from "../db";
-import { buildDefaultGameQueue, buildGameQueue, summarizeGameTokens } from "../game/queue";
+import { useEffect, useMemo, useReducer, useState } from "react";
+import { loadProject } from "../db";
+import { artStories } from "../game/artStories";
+import { initialPlayback, playbackPaused, updatePlayback } from "../game/playback";
+import { buildGameQueue, shuffle, summarizeGameTokens } from "../game/queue";
+import { buildPrintedGameQueue } from "../game/printedSet";
+import { gameSource } from "../game/source";
 import { collectOfflineUrls, prepareBrowserOfflineGame, type OfflinePreparation } from "../game/offline";
 import { browserFullscreenHost, browserWakeLockHost, enterFullscreen, exitFullscreen, keepScreenAwake } from "../game/screen";
-import { estimateQueueDuration, remainingFraction, tokenDurationMs } from "../game/timing";
+import { remainingFraction, tokenDurationMs } from "../game/timing";
 import type { GameSetup as GameSetupValues, GameToken } from "../game/types";
 import { tr, type MessageKey } from "../i18n";
 import { loadBuiltinLibrary } from "../library";
@@ -12,63 +15,65 @@ import type { Artwork, Project } from "../types";
 import { GameSetup } from "./GameSetup";
 import { GameStage } from "./GameStage";
 
-function defaultSetup(project: Project): GameSetupValues {
+function defaultSetup(language: string): GameSetupValues {
   return {
-    languages: [project.language === "fr" || project.language === "ru" ? project.language : "en"],
+    languages: [language],
     secondsPerToken: 6,
     includeAllNumbers: false,
   };
 }
 
 export function GamePage() {
-  const setId = useMemo(() => new URLSearchParams(window.location.search).get("set") || "default", []);
-  const isDefaultSet = setId === "default";
+  const source = useMemo(() => gameSource(window.location.search), []);
+  const gameHref = `${import.meta.env.BASE_URL}game/${window.location.search}`;
   const [project, setProject] = useState<Project | null>(null);
-  const [artworks, setArtworks] = useState<Artwork[]>([]);
+  const [builtin, setBuiltin] = useState<Artwork[]>([]);
   const [setup, setSetup] = useState<GameSetupValues | null>(null);
   const [queue, setQueue] = useState<GameToken[]>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const [elapsedBeforePause, setElapsedBeforePause] = useState(0);
-  const [tokenStartedAt, setTokenStartedAt] = useState(Date.now());
+  const [playback, dispatchPlayback] = useReducer(updatePlayback, undefined, () => initialPlayback(Date.now()));
   const [now, setNow] = useState(Date.now());
   const [playing, setPlaying] = useState(false);
   const [interfaceLanguage, setInterfaceLanguage] = useState("en");
   const [offline, setOffline] = useState<OfflinePreparation>({ state: "idle", completed: 0, total: 0, failed: 0 });
   const [endedByWinner, setEndedByWinner] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    Promise.all([loadBuiltinLibrary(), isDefaultSet ? Promise.resolve(undefined) : loadLatestProject()])
-      .then(([builtin, saved]) => {
-        const next = isDefaultSet ? createDefaultProject() : saved || createDefaultProject();
-        next.design = { ...defaultDesign, ...next.design };
-        next.bentoEnabled ??= true;
-        if (isDefaultSet) next.selectedArtworkIds = builtin.map((artwork) => artwork.id);
-        setProject(next);
-        setInterfaceLanguage(next.language === "fr" || next.language === "ru" ? next.language : "en");
-        setArtworks([...builtin, ...next.customArtworks]);
-        setSetup(defaultSetup(next));
+    if (source.kind === "missing") return;
+    let active = true;
+    Promise.all([
+      loadBuiltinLibrary(),
+      source.kind === "local" ? loadProject(source.projectId) : undefined,
+    ])
+      .then(([library, saved]) => {
+        if (!active) return;
+        if (source.kind === "local" && !saved) { setError(true); return; }
+        const language = saved?.language === "fr" || saved?.language === "ru" ? saved.language : "en";
+        setProject(saved ?? null);
+        setInterfaceLanguage(language);
+        setBuiltin(library);
+        setSetup(defaultSetup(language));
       })
-      .catch((reason) => setError(reason instanceof Error ? reason.message : String(reason)));
-  }, [isDefaultSet]);
+      .catch(() => { if (active) setError(true); });
+    return () => { active = false; };
+  }, [source]);
 
   useEffect(() => {
     document.documentElement.lang = interfaceLanguage;
   }, [interfaceLanguage]);
 
-  const artworkMap = useMemo(() => new Map(artworks.map((artwork) => [artwork.id, artwork])), [artworks]);
-  const usedQueue = useMemo(() => project
-    ? isDefaultSet ? buildDefaultGameQueue(artworks, () => 0) : buildGameQueue(project, artworkMap, false, () => 0)
-    : [], [artworkMap, artworks, isDefaultSet, project]);
+  const artworkMap = useMemo(() => new Map([...builtin, ...(project?.customArtworks ?? [])].map((artwork) => [artwork.id, artwork])), [builtin, project]);
+  const usedQueue = useMemo(() => {
+    if (source.kind === "printed") return buildPrintedGameQueue(artworkMap);
+    return project ? buildGameQueue(project, artworkMap, false, () => 0) : [];
+  }, [source, project, artworkMap]);
   const summary = useMemo(() => summarizeGameTokens(usedQueue), [usedQueue]);
-  const previewQueue = useMemo(() => project && setup
-    ? isDefaultSet ? buildDefaultGameQueue(artworks, () => 0) : buildGameQueue(project, artworkMap, setup.includeAllNumbers, () => 0)
-    : [], [artworkMap, artworks, isDefaultSet, project, setup]);
+  const includeAllNumbers = setup?.includeAllNumbers;
+  const previewQueue = useMemo(() => project && includeAllNumbers ? buildGameQueue(project, artworkMap, true, () => 0) : usedQueue, [artworkMap, project, includeAllNumbers, usedQueue]);
   const t = (key: MessageKey) => tr(interfaceLanguage, key);
 
   useEffect(() => {
-    if (!project) return;
+    if (!usedQueue.length) return;
     const shellUrls = Array.from(document.querySelectorAll<HTMLScriptElement | HTMLLinkElement>("script[src], link[rel='stylesheet'][href]"))
       .map((element) => element instanceof HTMLScriptElement ? element.src : element.href);
     const imageUrls = usedQueue.flatMap((token) => token.kind === "art" ? [token.artwork.imageUrl] : []);
@@ -83,18 +88,14 @@ export function GamePage() {
       import.meta.env.PROD,
     ).then((result) => active && setOffline(result));
     return () => { active = false; };
-  }, [project, usedQueue]);
+  }, [usedQueue]);
 
   const startGame = () => {
-    if (!project || !setup) return;
-    setQueue(isDefaultSet
-      ? buildDefaultGameQueue(artworks)
-      : buildGameQueue(project, artworkMap, setup.includeAllNumbers));
-    setActiveIndex(0);
-    setPaused(false);
-    setElapsedBeforePause(0);
-    setTokenStartedAt(Date.now());
-    setNow(Date.now());
+    if (!setup || !usedQueue.length) return;
+    setQueue(shuffle(previewQueue));
+    const startedAt = Date.now();
+    dispatchPlayback({ type: "reset", now: startedAt });
+    setNow(startedAt);
     setPlaying(true);
     setEndedByWinner(false);
     void enterFullscreen(browserFullscreenHost());
@@ -105,53 +106,46 @@ export function GamePage() {
     return keepScreenAwake(browserWakeLockHost());
   }, [playing]);
 
-  const durationMs = setup && queue[activeIndex] ? tokenDurationMs(queue[activeIndex], setup.secondsPerToken * 1000) : 0;
-  const elapsedMs = elapsedBeforePause + (playing && !paused ? Math.max(0, now - tokenStartedAt) : 0);
+  const activeIndex = playback.index;
+  const token = queue[activeIndex];
+  const story = token?.kind === "art" && builtin.includes(token.artwork) ? artStories.get(token.artwork.id) : undefined;
+  const paused = playbackPaused(playback);
+  const clockRunning = playing && !endedByWinner && !paused && activeIndex < queue.length;
+  const durationMs = setup && token ? tokenDurationMs(token, setup.secondsPerToken * 1000) : 0;
+  const elapsedMs = playback.elapsed + (clockRunning ? Math.max(0, now - playback.startedAt) : 0);
   const countdownProgress = remainingFraction(elapsedMs, durationMs);
 
   useEffect(() => {
-    if (!playing || paused || !setup || activeIndex >= queue.length) return;
-    const remainingMs = Math.max(0, durationMs - elapsedBeforePause);
+    if (!clockRunning) return;
+    const remainingMs = Math.max(0, durationMs - playback.elapsed - Math.max(0, Date.now() - playback.startedAt));
     const timer = window.setTimeout(() => {
-      setActiveIndex((index) => index + 1);
-      setElapsedBeforePause(0);
-      setTokenStartedAt(Date.now());
+      dispatchPlayback({ type: "advance", scheduledFor: playback, now: Date.now() });
     }, remainingMs);
     return () => window.clearTimeout(timer);
-  }, [activeIndex, durationMs, elapsedBeforePause, paused, playing, queue.length, setup]);
+  }, [clockRunning, durationMs, playback]);
 
   useEffect(() => {
-    if (!playing || paused || activeIndex >= queue.length) return;
+    if (!clockRunning) return;
     const frame = window.requestAnimationFrame(() => setNow(Date.now()));
     return () => window.cancelAnimationFrame(frame);
-  }, [activeIndex, now, paused, playing, queue.length]);
+  }, [clockRunning, now, playback]);
 
   const moveTo = (nextIndex: number) => {
-    setActiveIndex(Math.max(0, Math.min(queue.length, nextIndex)));
-    setElapsedBeforePause(0);
-    setTokenStartedAt(Date.now());
-    setNow(Date.now());
+    dispatchPlayback({ type: "move", index: Math.max(0, Math.min(queue.length, nextIndex)), now: Date.now() });
   };
 
-  const togglePause = () => {
-    if (paused) {
-      setTokenStartedAt(Date.now());
-      setNow(Date.now());
-      setPaused(false);
-      return;
-    }
-    setElapsedBeforePause((current) => current + Math.max(0, Date.now() - tokenStartedAt));
-    setPaused(true);
-  };
-
-  if (error) return <main className="game-page game-loading">{error}</main>;
-  if (!project || !setup) return <main className="game-page game-loading">{t("loading")}</main>;
+  if (source.kind === "missing" || error || (source.kind === "printed" && setup && !summary.total)) {
+    return <main className="game-page game-loading" role="status">{t(source.kind === "local" ? "gameLocalUnavailable" : "gameSetUnavailable")}</main>;
+  }
+  if (!setup) return <main className="game-page game-loading">{t("loading")}</main>;
 
   if (!playing) {
     return <GameSetup
       setup={setup}
       summary={summary}
       previewQueue={previewQueue}
+      gameHref={gameHref}
+      allowExtraNumbers={source.kind === "local"}
       language={interfaceLanguage}
       interfaceLanguage={interfaceLanguage}
       offline={offline}
@@ -163,6 +157,7 @@ export function GamePage() {
   }
 
   return <GameStage
+    gameHref={gameHref}
     queue={queue}
     activeIndex={activeIndex}
     languages={setup.languages}
@@ -171,13 +166,19 @@ export function GamePage() {
     secondsPerToken={setup.secondsPerToken}
     durationMs={durationMs}
     endedByWinner={endedByWinner}
+    interfaceLanguage={interfaceLanguage}
+    story={story}
+    storyOpen={playback.storyOpen}
     t={t}
     onPrevious={() => moveTo(activeIndex - 1)}
     onNext={() => moveTo(activeIndex + 1)}
-    onTogglePause={togglePause}
+    onPause={() => dispatchPlayback({ type: "pause", now: Date.now() })}
+    onResume={() => dispatchPlayback({ type: "resume", now: Date.now() })}
+    onOpenStory={() => { if (story) dispatchPlayback({ type: "open-story", index: activeIndex, now: Date.now() }); }}
+    onCloseStory={() => dispatchPlayback({ type: "close-story" })}
     onRestart={startGame}
-    onBackToSetup={() => { setPlaying(false); setPaused(false); moveTo(0); void exitFullscreen(browserFullscreenHost()); }}
-    onEndGame={() => { setPaused(true); setEndedByWinner(true); }}
-    onSpeedChange={(secondsPerToken) => { setSetup((current) => current ? { ...current, secondsPerToken } : current); setElapsedBeforePause(0); setTokenStartedAt(Date.now()); setNow(Date.now()); }}
+    onBackToSetup={() => { setPlaying(false); void exitFullscreen(browserFullscreenHost()); }}
+    onEndGame={() => setEndedByWinner(true)}
+    onSpeedChange={(secondsPerToken) => { setSetup((current) => current ? { ...current, secondsPerToken } : current); dispatchPlayback({ type: "reset-clock", now: Date.now() }); }}
   />;
 }

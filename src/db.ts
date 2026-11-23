@@ -39,3 +39,16 @@ export async function loadLatestProject(): Promise<Project | undefined> {
   database.close();
   return projects.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
 }
+
+export async function loadProject(projectId: string): Promise<Project | undefined> {
+  const database = await openDatabase();
+  try {
+    return await new Promise<Project | undefined>((resolve, reject) => {
+      const request = database.transaction(STORE_NAME).objectStore(STORE_NAME).get(projectId);
+      request.onsuccess = () => resolve(request.result as Project | undefined);
+      request.onerror = () => reject(request.error);
+    });
+  } finally {
+    database.close();
+  }
+}

@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build && node scripts/create_game_entry.mjs",
     "preview": "vite preview",
     "check": "tsc -b --pretty false",
-    "check:game": "node scripts/check_game_queue.mjs",
+    "check:game": "node scripts/check_game_queue.mjs && node --test tests/*.test.ts",
     "check:game-stage-layout": "node scripts/check_game_stage_layout.mjs",
     "check:game-ui": "node scripts/check_game_ui.mjs",
     "check:pwa": "node scripts/check_pwa.mjs",

@@ -162,8 +162,8 @@ assert.doesNotMatch(css, /#5a5750|#555149/);
 assert.equal(css.match(/#6a665e/g).length, 4);
 assert.match(stageSource, /paused && <button className="game-end-button"/);
 assert.match(stageSource, /requestFullscreen/);
-assert.match(stageSource, /game\/\?set=default/);
-assert.match(stageSource, /if \(paused\) setSpeedOpen\(false\)/);
+assert.equal([...stageSource.matchAll(/className="game-brand" href=\{gameHref\}/g)].length, 2);
+assert.match(stageSource, /if \(paused\) \{\s*setSpeedOpen\(false\);\s*onResume\(\);/);
 assert.doesNotMatch(stageSource, /t\("remaining"\)/);
 assert.match(stageSource, /game-stage-page\$\{paused \? " is-paused" : ""\}/);
 assert.match(stageSource, /"--token-duration": `\$\{durationMs\}ms`/);
@@ -176,8 +176,9 @@ assert.match(pageSource, /durationMs=\{durationMs\}/);
 assert.match(pageSource, /setEndedByWinner\(false\);\s*\n\s*void enterFullscreen\(browserFullscreenHost\(\)\);/, "fullscreen must be requested inside the start click, not in an effect");
 assert.match(pageSource, /if \(!playing\) return;\s*\n\s*return keepScreenAwake\(browserWakeLockHost\(\)\);/);
 assert.match(pageSource, /onBackToSetup=\{[^}]*void exitFullscreen\(browserFullscreenHost\(\)\)/);
-assert.match(pageSource, /URLSearchParams\(window\.location\.search\)/, "The game route must read its set parameter");
-assert.match(pageSource, /buildDefaultGameQueue\(artworks/, "The default set must use the complete built-in library without cards");
+assert.match(pageSource, /gameSource\(window\.location\.search\)/, "The game route must read its set parameter");
+assert.match(pageSource, /source\.kind === "printed"\) return buildPrintedGameQueue\(artworkMap\)/, "The default set must use the printed cards without local data");
+assert.doesNotMatch(setupSource, /disabled=\{offline\.state/, "Start must not wait for offline preparation");
 assert.match(i18nSource, /gameLanguagesHelp: "Выберите языки подписей для игры\."/);
 
 const offlineUrls = offline.collectOfflineUrls({
