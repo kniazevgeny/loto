@@ -76,7 +76,7 @@ export function GameArtStory({ artwork, story, origin, language, t, onClose, onR
     <div className="game-art-explore-inner">
       <StoryOrnament />
       <header className="game-art-explore-top">
-        <p className="game-story-status"><Pause size={14} aria-hidden="true" />{t("storyPaused")}</p>
+        {!detail && <p className="game-story-status"><Pause size={14} aria-hidden="true" />{t("storyPaused")}</p>}
         <button className="game-story-close" type="button" aria-label={t("storyClose")} onClick={onClose}><X size={20} aria-hidden="true" /></button>
       </header>
       <div className="game-art-explore-layout">
@@ -103,9 +103,11 @@ export function GameArtStory({ artwork, story, origin, language, t, onClose, onR
             </div>
             <StorySpray className="game-story-botanical" />
           </div>}
-          <h2 id="game-story-title" ref={heading} tabIndex={-1}>{title}</h2>
-          <p className="game-story-meta">{[artwork.author, artwork.year].filter(Boolean).join(" · ")}</p>
-          <div className="game-story-rule" aria-hidden="true"><StorySpray className="game-story-filigree" /></div>
+          <h2 id="game-story-title" ref={heading} tabIndex={-1} hidden={!!detail}>{title}</h2>
+          {!detail && <>
+            <p className="game-story-meta">{[artwork.author, artwork.year].filter(Boolean).join(" · ")}</p>
+            <div className="game-story-rule" aria-hidden="true"><StorySpray className="game-story-filigree" /></div>
+          </>}
           <div id="game-story-detail" aria-live="polite" aria-atomic="true">
             <h3>{copy.headline}</h3>
             <p className="game-story-fact">{copy.fact}</p>

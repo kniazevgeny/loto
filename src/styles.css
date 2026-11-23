@@ -428,8 +428,8 @@ body:has(.game-page) { min-width: 0; }
 .game-story-vine, .game-story-corner { position: absolute; overflow: visible; }
 .game-story-vine { left: 6px; bottom: 10px; width: clamp(84px, 14vw, 220px); height: calc(100% - 78px); opacity: .86; }
 .game-story-corner { bottom: 8px; right: 12px; width: clamp(130px, 18vw, 290px); opacity: .88; }
-.game-art-explore-top { display: flex; justify-content: space-between; align-items: center; }
-.game-story-status { display: inline-flex; align-items: center; gap: 8px; margin: 0; color: var(--gallery-muted); font-size: .75rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+.game-art-explore-top { display: flex; justify-content: flex-end; align-items: center; }
+.game-story-status { display: inline-flex; align-items: center; gap: 8px; margin: 0; margin-inline-end: auto; color: var(--gallery-muted); font-size: .75rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
 .game-story-close { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid #615a4e; border-radius: 50%; background: transparent; color: var(--gallery-ink); cursor: pointer; }
 .game-story-close:hover { background: #2b2924; }
 .game-art-explore-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(17rem, 23rem); gap: clamp(28px, 5.5vw, 84px); width: min(100%, 69rem); align-items: center; align-self: center; justify-self: center; }
